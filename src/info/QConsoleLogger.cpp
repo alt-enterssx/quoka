@@ -1,10 +1,12 @@
 #include "altenter/info/QConsoleLogger.h"
 
-altenter::quokahttp::QConsoleLogger::QConsoleLogger() {
+using namespace altenter::quokahttp;
+
+QConsoleLogger::QConsoleLogger() {
     this->thrd = std::thread(&QConsoleLogger::process, this);
 }
 
-altenter::quokahttp::QConsoleLogger::~QConsoleLogger() {
+QConsoleLogger::~QConsoleLogger() {
     this->run = false;
     this->cv.notify_all();
     if (this->thrd.joinable()) {
@@ -12,29 +14,39 @@ altenter::quokahttp::QConsoleLogger::~QConsoleLogger() {
     }
 }
 
-void altenter::quokahttp::QConsoleLogger::log(std::string&& msg) {
+void QConsoleLogger::shutdown() {
+    this->run = false;
+    this->cv.notify_all();
+    if (this->thrd.joinable()) {
+        this->thrd.join();
+    }
+}
+
+void QConsoleLogger::log(const std::string& msg) {
 
     {
 
         std::lock_guard<std::mutex> lock(this->mtx);
 
-        this->logMessages.emplace(std::move(msg), altenter::quokahttp::LogType::INFO);
+        this->logMessages.emplace(std::move(msg), detail::LogType::INFO);
 
-    }
+    } 
 
     this->cv.notify_one();
 
 }
 
-void altenter::quokahttp::QConsoleLogger::log(std::string&& msg, altenter::quokahttp::LogType type) {
+void QConsoleLogger::log(const std::string& msg, detail::LogType type) {
     {
         std::lock_guard<std::mutex> lock(this->mtx);
-        this->logMessages.emplace(std::move(msg), type);
+        this->logMessages.emplace(msg, type);
     }
     this->cv.notify_one();
 }
 
-void altenter::quokahttp::QConsoleLogger::process() {
+char* QConsoleLogger::loggerName() { return "Console Logger"; }
+
+void QConsoleLogger::process() {
     while (run || !logMessages.empty()) {
         std::unique_lock<std::mutex> lock(mtx);
 
@@ -60,34 +72,34 @@ void altenter::quokahttp::QConsoleLogger::process() {
     }
 }
 
-std::string altenter::quokahttp::QConsoleLogger::getPrefix(altenter::quokahttp::LogType type) {
+std::string QConsoleLogger::getPrefix(detail::LogType type) {
     std::string combined;
     switch(type) {
-        case altenter::quokahttp::LogType::WARNING: {
+        case detail::LogType::WARNING: {
             combined = WARNING_COLOR;
             combined = combined + " | WARNING  ";
 
             break;
         }
-        case altenter::quokahttp::LogType::DEBUG: {
+        case detail::LogType::DEBUG: {
             combined = DEBUG_COLOR;
             combined = combined + " | DEBUG    ";
 
             break;
         }
-        case altenter::quokahttp::LogType::INFO: {
+        case detail::LogType::INFO: {
             combined = INFO_COLOR;
             combined = combined + " | INFO     ";
 
             break;
         }
-        case altenter::quokahttp::LogType::ERROR: {
+        case detail::LogType::ERROR: {
             combined = ERROR_COLOR;
             combined = combined + " | ERROR    ";
 
             break;
         }
-        case altenter::quokahttp::LogType::CRITICAL: {
+        case detail::LogType::CRITICAL: {
             combined = CRITICAL_COLOR;
             combined = combined + " | CRITICAL ";
 
@@ -99,7 +111,7 @@ std::string altenter::quokahttp::QConsoleLogger::getPrefix(altenter::quokahttp::
     return combined;
 }
 
-std::string altenter::quokahttp::QConsoleLogger::getTimeInfo() {
+std::string QConsoleLogger::getTimeInfo() {
     std::time_t t = time(nullptr);
     std::tm* loctime = localtime(&t);
 
@@ -115,42 +127,42 @@ std::string altenter::quokahttp::QConsoleLogger::getTimeInfo() {
     return time_str;
 }
 
-char* altenter::quokahttp::QConsoleLogger::getColorText(altenter::quokahttp::LogType type) {
+char* QConsoleLogger::getColorText(detail::LogType type) {
     switch(type) {
-        case altenter::quokahttp::LogType::WARNING: {
+        case detail::LogType::WARNING: {
             return WARNING_COLOR_TEXT;
         }
-        case altenter::quokahttp::LogType::DEBUG: {
+        case detail::LogType::DEBUG: {
             return DEBUG_COLOR_TEXT;
         }
-        case altenter::quokahttp::LogType::INFO: {
+        case detail::LogType::INFO: {
             return INFO_COLOR_TEXT;
         }
-        case altenter::quokahttp::LogType::ERROR: {
+        case detail::LogType::ERROR: {
             return ERROR_COLOR_TEXT;
         }
-        case altenter::quokahttp::LogType::CRITICAL: {
+        case detail::LogType::CRITICAL: {
             return CRITICAL_COLOR_TEXT;
         }
         default: { return ""; }
     }
 }
 
-char* altenter::quokahttp::QConsoleLogger::getColorBg(altenter::quokahttp::LogType type) {
+char* QConsoleLogger::getColorBg(detail::LogType type) {
     switch(type) {
-        case altenter::quokahttp::LogType::WARNING: {
+        case detail::LogType::WARNING: {
             return WARNING_COLOR;
         }
-        case altenter::quokahttp::LogType::DEBUG: {
+        case detail::LogType::DEBUG: {
             return DEBUG_COLOR;
         }
-        case altenter::quokahttp::LogType::INFO: {
+        case detail::LogType::INFO: {
             return INFO_COLOR;
         }
-        case altenter::quokahttp::LogType::ERROR: {
+        case detail::LogType::ERROR: {
             return ERROR_COLOR;
         }
-        case altenter::quokahttp::LogType::CRITICAL: {
+        case detail::LogType::CRITICAL: {
             return CRITICAL_COLOR;
         }
         default: { return ""; }

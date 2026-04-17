@@ -13,6 +13,8 @@
 #include <thread>
 #include <atomic>
 #include <condition_variable>
+#include <vector>
+#include <sstream>
 
 #define WARNING_COLOR "\033[1;30;43m"
 #define DEBUG_COLOR "\033[1;30;105m"
@@ -32,29 +34,53 @@
 
 namespace altenter::quokahttp {
 
-    enum LogType {
-        WARNING,
-        DEBUG,
-        INFO,
-        ERROR,
-        CRITICAL
-    };
-
     struct LogMessage {
         std::string msg;
-        altenter::quokahttp::LogType type;
+        altenter::quokahttp::detail::LogType type;
 
-        LogMessage(std::string&& msg, altenter::quokahttp::LogType type = altenter::quokahttp::LogType::INFO): msg(msg), type(type) {}
+        LogMessage(const std::string& msg, altenter::quokahttp::detail::LogType type = altenter::quokahttp::detail::LogType::INFO): msg(msg), type(type) {}
     };
 
-    class QConsoleLogger: public altenter::quokahttp::detail::QILogger {
+    class QConsoleLogger: public detail::QILogger 
+    {
         public:
             QConsoleLogger();
             ~QConsoleLogger();
 
-            void log(std::string&& msg) override;
-            void log(std::string&& msg, altenter::quokahttp::LogType type = altenter::quokahttp::LogType::INFO);
+            void shutdown() override;
+
+            void log(const std::string& msg) override;
+            void log(const std::string& msg, altenter::quokahttp::detail::LogType type = altenter::quokahttp::detail::LogType::INFO) override;
             
+            template<typename... Args>
+            void logFormat(const std::string& msg, altenter::quokahttp::detail::LogType type, Args&&... args) {
+                std::vector<std::string> params = {
+                    toString(std::forward<Args>(args))...
+                };
+
+                std::string result;
+                result.reserve(msg.size() + 32);
+
+                size_t argIndex = 0;
+
+                for (size_t i = 0; i < msg.size(); ++i) {
+                    if (msg[i] == '{' && i + 1 < msg.size() && msg[i + 1] == '}') {
+                        if (argIndex < params.size()) {
+                            result += params[argIndex++];
+                        } else {
+                            result += "{}";
+                        }
+                        ++i;
+                    } else {
+                        result += msg[i];
+                    }
+                }
+
+                this->log(std::move(result), type);
+            }
+
+            char* loggerName() override;
+
             private:
             std::queue<LogMessage> logMessages;
         
@@ -65,9 +91,16 @@ namespace altenter::quokahttp {
 
             void process();
 
-            std::string getPrefix(altenter::quokahttp::LogType type);
+            std::string getPrefix(altenter::quokahttp::detail::LogType type);
             std::string getTimeInfo();
-            char* getColorText(altenter::quokahttp::LogType type);
-            char* getColorBg(altenter::quokahttp::LogType type);
+            char* getColorText(altenter::quokahttp::detail::LogType type);
+            char* getColorBg(altenter::quokahttp::detail::LogType type);
+
+            template<typename T>
+            std::string toString(T& value) {
+                std::ostringstream oss;
+                oss << std::forward<T>(value);
+                return oss.str();
+            }
     };
 }
