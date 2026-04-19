@@ -5,12 +5,15 @@
 #include <cstdint>
 #include <memory>
 #include <sstream>
+#include <unistd.h>
 #include "altenter/info/QILogger.h"
 #include "altenter/info/QConsoleLogger.h"
 #include "altenter/net/QTcpSocket.h"
 #include "altenter/QException.h"
+#include "altenter/info/QLogManager.h"
 
 #define DEFAULT_PORT_START 2060
+#define LOCAL_ADDRESS "127.0.0.1"
 
 namespace altenter::quokahttp {    
     class QServer 
@@ -21,17 +24,13 @@ namespace altenter::quokahttp {
 
             void run(int port = DEFAULT_PORT_START);
 
-            void addLogger(std::shared_ptr<detail::QILogger> logger);
-
         private:
-            void shutDownAll();
-            void logAll(const std::string& msg, detail::LogType type);
 
             bool isRunning;
 
             int qs_port;
             detail::QTcpSocket socket;
 
-            std::vector<std::shared_ptr<detail::QILogger>> loggers;
+            detail::QLogManager logManager;
     };
 }

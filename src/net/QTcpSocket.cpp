@@ -2,7 +2,7 @@
 
 using namespace altenter::quokahttp::detail;
 
-QTcpSocket::QTcpSocket() {}
+QTcpSocket::QTcpSocket(QLogManager& logManager): logManager(logManager) {}
 QTcpSocket::~QTcpSocket() {}
 
 void QTcpSocket::init_socket() {
@@ -21,7 +21,7 @@ void QTcpSocket::init_socket() {
     }
 
     log_msg << "Socket created successfully, fd: (" << this->qs_socket << ")";
-    this->logAll(log_msg.str(), LogType::DEBUG);
+    logManager.log(log_msg.str(), LogType::DEBUG);
 
     log_msg.str("");
     log_msg.clear();
@@ -43,16 +43,28 @@ void QTcpSocket::bind_address(uint16_t port) {
         log_msg.str("");
         log_msg.clear();
     }
+
+    log_msg << "Server binded on port: (" << port << ")";
+    logManager.log(log_msg.str(), LogType::DEBUG);
+
+    log_msg.str("");
+    log_msg.clear();
+
+    if (listen(this->qs_socket, SOMAXCONN) == -1) {
+        log_msg << "Error in listening socket: (" << std::strerror(errno) << ")";
+        throw QException(log_msg.str(), ExceptionType::CRITICAL);
+
+        log_msg.str("");
+        log_msg.clear();
+    }
+
+    log_msg << "Server started to listen";
+    logManager.log(log_msg.str(), LogType::DEBUG);
+
+    log_msg.str("");
+    log_msg.clear();
 }
 
-void QTcpSocket::addLogger(std::shared_ptr<QILogger> logger) { this->loggers.push_back(logger); }
- 
 int QTcpSocket::getSocket() { return this->qs_socket; }
 
 sockaddr_in QTcpSocket::getAddress() { return this->qs_address; }
-
-void QTcpSocket::logAll(const std::string& msg, LogType type) {
-    for (auto& logger : loggers) {
-        logger->log(msg, type);
-    }
-}

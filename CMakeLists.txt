@@ -7,6 +7,7 @@ add_library(${PROJECT_NAME} STATIC)
 
 target_sources(${PROJECT_NAME} PRIVATE 
     src/info/QConsoleLogger.cpp
+    src/info/QLogManager.cpp
     src/http/QServer.cpp
     src/QException.cpp
     src/net/QTcpSocket.cpp
