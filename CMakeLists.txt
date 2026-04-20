@@ -6,11 +6,13 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 add_library(${PROJECT_NAME} STATIC)
 
 target_sources(${PROJECT_NAME} PRIVATE 
-    src/info/QConsoleLogger.cpp
-    src/info/QLogManager.cpp
-    src/http/QServer.cpp
-    src/QException.cpp
-    src/net/QTcpSocket.cpp
+    src/info/qconsole_logger.cpp
+    src/info/qlog_manager.cpp
+    src/http/qserver.cpp
+    src/http/qlistener.cpp
+    src/detail/qtcp_sokcet.cpp
+    src/detail/qtask_pool.cpp
+    src/qexception.cpp
 )
 
 target_include_directories(${PROJECT_NAME} 
