@@ -11,8 +11,8 @@ namespace altenter::quokahttp::detail {
             qlog_manager();
             ~qlog_manager();
 
-            void add_logger(std::shared_ptr<detail::q_i_logger> logger);
-            void log(const std::string& msg, detail::log_type type);
+            void add_logger(std::shared_ptr<q_i_logger> logger);
+            void log(const std::string& msg, log_type type);
             void shutdown();
 
         private:

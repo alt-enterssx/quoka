@@ -15,7 +15,7 @@ namespace altenter::quokahttp::detail {
     class q_i_logger 
     {
         public:
-            virtual void log(const std::string& msg, altenter::quokahttp::detail::log_type type = altenter::quokahttp::detail::log_type::INFO) = 0;
+            virtual void log(const std::string& msg, log_type type = log_type::INFO) = 0;
             virtual void log(const std::string& msg) = 0;
             virtual void shutdown() = 0;
     };

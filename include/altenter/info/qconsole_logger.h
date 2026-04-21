@@ -38,7 +38,7 @@ namespace altenter::quokahttp {
         std::string msg;
         altenter::quokahttp::detail::log_type type;
 
-        log_message(const std::string& msg, altenter::quokahttp::detail::log_type type = altenter::quokahttp::detail::log_type::INFO): msg(msg), type(type) {}
+        log_message(const std::string& msg, detail::log_type type = detail::log_type::INFO): msg(msg), type(type) {}
     };
 
     class qconsole_logger: public detail::q_i_logger 
@@ -50,7 +50,7 @@ namespace altenter::quokahttp {
             void shutdown() override;
 
             void log(const std::string& msg) override;
-            void log(const std::string& msg, altenter::quokahttp::detail::log_type type = altenter::quokahttp::detail::log_type::INFO) override;
+            void log(const std::string& msg, detail::log_type type = detail::log_type::INFO) override;
             
             private:
             std::queue<log_message> log_messages;
@@ -62,10 +62,10 @@ namespace altenter::quokahttp {
 
             void process();
 
-            std::string get_prefix(altenter::quokahttp::detail::log_type type);
+            std::string get_prefix(detail::log_type type);
             std::string get_time_info();
-            char* get_color_text(altenter::quokahttp::detail::log_type type);
-            char* get_color_bg(altenter::quokahttp::detail::log_type type);
+            char* get_color_text(detail::log_type type);
+            char* get_color_bg(detail::log_type type);
 
     };
 }

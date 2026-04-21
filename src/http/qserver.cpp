@@ -27,6 +27,13 @@ void qserver::run(int port) {
         this->socket.init_socket();
         this->socket.bind_address(this->qs_port);
 
+        this->is_running = true;
+        log_msg << "Server started and running: " "http://" << LOCAL_ADDRESS << ":" << this->qs_port;
+        this->log_manager.log(log_msg.str(), detail::log_type::INFO);
+
+        log_msg.str("");
+        log_msg.clear(); 
+
         listener.set_socket(this->socket.get_socket());
         listener.listen();
     } catch(qexception& ex) {
@@ -36,12 +43,5 @@ void qserver::run(int port) {
         this->log_manager.shutdown();       
 
         if (ex.get_type() == exception_type::CRITICAL) { exit(EXIT_FAILURE); }
-    }
-
-    this->is_running = true;
-    log_msg << "Server started and running: " "http://" << LOCAL_ADDRESS << ":" << this->qs_port;
-    this->log_manager.log(log_msg.str(), detail::log_type::INFO);
-
-    log_msg.str("");
-    log_msg.clear();    
+    }   
 }
