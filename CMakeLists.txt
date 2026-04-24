@@ -11,7 +11,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/http/qserver.cpp
     src/http/qlistener.cpp
     src/detail/qtcp_sokcet.cpp
-    src/detail/qtask_pool.cpp
+    src/detail/qrequest_pool.cpp
     src/qexception.cpp
 )
 
