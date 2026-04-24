@@ -12,14 +12,10 @@ qserver::~qserver() {
 }
 
 void qserver::run(int port) {
-    std::stringstream log_msg;
     if (port < 0x0 || port > 0xFFFF) {
-        log_msg << "Argument port is invalid: (" << port << "), gets default port: (" << DEFAULT_PORT_START << ")";
-        this->log_manager.log(log_msg.str(), detail::log_type::WARNING);
+        this->log_manager.logFormat("Argument port is invalid: ({}), gets default port: ({})", detail::log_type::WARNING,
+            port, DEFAULT_PORT_START);
         
-        log_msg.str("");
-        log_msg.clear();
-
         this->qs_port = DEFAULT_PORT_START;
     } else { this->qs_port = port; }
 
@@ -28,11 +24,7 @@ void qserver::run(int port) {
         this->socket.bind_address(this->qs_port);
 
         this->is_running = true;
-        log_msg << "Server started and running: " "http://" << LOCAL_ADDRESS << ":" << this->qs_port;
-        this->log_manager.log(log_msg.str(), detail::log_type::INFO);
-
-        log_msg.str("");
-        log_msg.clear(); 
+        this->log_manager.logFormat("Server started and running: http://{}:{}", detail::log_type::INFO, LOCAL_ADDRESS, this->qs_port);
 
         listener.set_socket(this->socket.get_socket());
         listener.listen();

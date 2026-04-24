@@ -20,11 +20,7 @@ void qtcp_socket::init_socket() {
         log_msg.clear();
     }
 
-    log_msg << "Socket created successfully, fd: (" << this->qs_socket << ")";
-    log_manager.log(log_msg.str(), log_type::DEBUG);
-
-    log_msg.str("");
-    log_msg.clear();
+    log_manager.logFormat("Socket created successfully, fd: ({})", log_type::DEBUG, this->qs_socket);
 }
 
 void qtcp_socket::bind_address(uint16_t port) {
@@ -44,11 +40,7 @@ void qtcp_socket::bind_address(uint16_t port) {
         log_msg.clear();
     }
 
-    log_msg << "Server binded on port: (" << port << ")";
-    log_manager.log(log_msg.str(), log_type::DEBUG);
-
-    log_msg.str("");
-    log_msg.clear();
+    log_manager.logFormat("Server binded on port: ({})", log_type::DEBUG, port);
 
     if (listen(this->qs_socket, SOMAXCONN) == -1) {
         log_msg << "Error in listening socket: (" << std::strerror(errno) << ")";
@@ -58,11 +50,7 @@ void qtcp_socket::bind_address(uint16_t port) {
         log_msg.clear();
     }
 
-    log_msg << "Server started to listen";
-    log_manager.log(log_msg.str(), log_type::DEBUG);
-
-    log_msg.str("");
-    log_msg.clear();
+    log_manager.log("Server started to listen", log_type::DEBUG);
 }
 
 int qtcp_socket::get_socket() { return this->qs_socket; }

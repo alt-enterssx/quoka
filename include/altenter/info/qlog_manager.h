@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <sstream>
 #include "altenter/detail/q_i_logger.h"
 
 namespace altenter::quokahttp::detail {
@@ -13,6 +14,44 @@ namespace altenter::quokahttp::detail {
 
             void add_logger(std::shared_ptr<q_i_logger> logger);
             void log(const std::string& msg, log_type type);
+            
+            template<typename... Args>
+            void logFormat(std::string_view fmt, log_type type, Args&&... args) {
+                std::ostringstream ss;
+
+                std::string_view rest = fmt;
+                size_t arg_index = 0;
+
+                    std::string arg_strings[] = {
+                    ([&]{
+                        std::ostringstream tmp;
+                        tmp << std::forward<Args>(args);
+                        return tmp.str();
+                    }())...
+                };
+
+                while (true) {
+                    size_t pos = rest.find("{}");
+
+                    if (pos == std::string_view::npos) {
+                        ss << rest;
+                        break;
+                    }
+
+                    ss << rest.substr(0, pos);
+
+                    if (arg_index < sizeof...(Args)) {
+                        ss << arg_strings[arg_index++];
+                    } else {
+                        ss << "{}";
+                    }
+
+                    rest = rest.substr(pos + 2);
+                }
+
+                this->log(ss.str(), type);
+            }
+            
             void shutdown();
 
         private:
