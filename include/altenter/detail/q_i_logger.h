@@ -2,9 +2,10 @@
 
 #include <string>
 
-namespace altenter::quokahttp::detail {
-
-    enum log_type {
+namespace altenter::quokahttp::detail 
+{
+    enum log_type 
+    {
         WARNING,
         DEBUG,
         INFO,

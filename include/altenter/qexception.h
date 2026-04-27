@@ -3,9 +3,10 @@
 #include <stdexcept>
 #include <string>
 
-namespace altenter::quokahttp {
-    
-    enum exception_type {
+namespace altenter::quokahttp 
+{    
+    enum exception_type 
+    {
         ERROR,
         CRITICAL
     };

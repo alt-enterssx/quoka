@@ -9,9 +9,10 @@
 
 #define DEFAULT_THREADS_CNT 4
 
-namespace altenter::quokahttp::detail {
-    
-    enum request_status {
+namespace altenter::quokahttp::detail
+{    
+    enum request_status
+    {
         COMPLETE,
         QUEUE
     };

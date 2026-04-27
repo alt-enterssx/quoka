@@ -7,6 +7,9 @@
 #include <cstring>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <iostream>
+#include "altenter/http/dto/qrequest.h"
+#include "altenter/http/dto/qresponse.h"
 #include "altenter/info/qlog_manager.h"
 #include "altenter/detail/qrequest_pool.h"
 #include "altenter/detail/q_i_logger.h"
@@ -14,7 +17,8 @@
 
 #define CLASSNAMELOG "qlistener"
 
-namespace altenter::quokahttp::detail {
+namespace altenter::quokahttp::detail 
+{
     class qlistener 
     {
         public:

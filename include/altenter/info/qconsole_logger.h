@@ -32,9 +32,10 @@
 
 #define RESET "\033[0m"
 
-namespace altenter::quokahttp {
-
-    struct log_message {
+namespace altenter::quokahttp 
+{
+    struct log_message 
+    {
         std::string msg;
         altenter::quokahttp::detail::log_type type;
 

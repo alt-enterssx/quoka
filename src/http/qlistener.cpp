@@ -69,7 +69,10 @@ void qlistener::process(int socket) {
         close(socket);
         return;
     } else {
-        this->log_manager.logFormat("[connection] recived data: {}", log_type::INFO, buffer);
+        std::string buffer_str = buffer;
+        qrequest request = qrequest(buffer_str, this->log_manager);
+        request.parse();
+        this->log_manager.logFormat("[connection] request uri: {}, method: {}, version: {}", log_type::INFO, request.get_uri(), request.get_method(), request.get_http_version());
     }
 
     delete[] buffer;

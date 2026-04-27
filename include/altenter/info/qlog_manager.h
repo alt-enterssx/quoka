@@ -5,7 +5,8 @@
 #include <sstream>
 #include "altenter/detail/q_i_logger.h"
 
-namespace altenter::quokahttp::detail {
+namespace altenter::quokahttp::detail 
+{
     class qlog_manager 
     {
         public:
