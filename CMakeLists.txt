@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(PROJECT_NAME quoka_http)
+set(CMAKE_BUILD_TYPE Debug)
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 add_library(${PROJECT_NAME} STATIC)
@@ -10,6 +11,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/info/qlog_manager.cpp
     src/http/qserver.cpp
     src/http/qlistener.cpp
+    src/http/qrouter.cpp
     src/http/dto/qrequest.cpp
     src/http/dto/qresponse.cpp
     src/detail/qtcp_sokcet.cpp

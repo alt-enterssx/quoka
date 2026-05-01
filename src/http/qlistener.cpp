@@ -2,7 +2,7 @@
 
 using namespace altenter::quokahttp::detail;
 
-qlistener::qlistener(qlog_manager& log_manager): is_running(true), log_manager(log_manager), qs_socket(-1), pool() {}
+qlistener::qlistener(qrouter& router, qlog_manager& log_manager): is_running(true), router(router), log_manager(log_manager), qs_socket(-1), pool() {}
 
 qlistener::~qlistener() { this->is_running = false; }
 
@@ -16,7 +16,7 @@ void qlistener::listen() {
 
     this->log_manager.log("Server started to listening now", log_type::INFO);
 
-    while (is_running) {
+    while (this->is_running) {
 
         sockaddr_in client_addr{};
         socklen_t addr_len = sizeof(client_addr);
@@ -35,12 +35,7 @@ void qlistener::listen() {
         char ip_str[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &client_addr.sin_addr, ip_str, INET_ADDRSTRLEN);
 
-        log_manager.logFormat(
-            "[connection client={}:{}]",
-            log_type::DEBUG,
-            ip_str,
-            ntohs(client_addr.sin_port)
-        );
+        log_manager.logFormat("[connection] client={}:{}", log_type::DEBUG, ip_str, ntohs(client_addr.sin_port));
 
         qrequest_item item([this](int socket) {
             this->process(socket);
@@ -70,9 +65,22 @@ void qlistener::process(int socket) {
         return;
     } else {
         std::string buffer_str = buffer;
-        qrequest request = qrequest(buffer_str, this->log_manager);
+        qrequest request(buffer_str, this->log_manager);
         request.parse();
         this->log_manager.logFormat("[connection] request uri: {}, method: {}, version: {}", log_type::INFO, request.get_uri(), request.get_method(), request.get_http_version());
+        
+        qresponse response(this->log_manager);
+        this->router.endpoint(request.get_method(), request.get_uri(), request, response);
+        response.generate();
+        std::string raw_data = response.get_raw_data();
+
+        if (send(socket, raw_data.c_str(), raw_data.size(), 0) == -1) {
+           this->log_manager.logFormat("Error send data: ({})", log_type::ERROR, std::strerror(errno));    
+            close(socket);
+
+            return;
+        }
+
     }
 
     delete[] buffer;

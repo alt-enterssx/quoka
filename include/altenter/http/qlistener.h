@@ -10,6 +10,7 @@
 #include <iostream>
 #include "altenter/http/dto/qrequest.h"
 #include "altenter/http/dto/qresponse.h"
+#include "altenter/http/qrouter.h"
 #include "altenter/info/qlog_manager.h"
 #include "altenter/detail/qrequest_pool.h"
 #include "altenter/detail/q_i_logger.h"
@@ -22,17 +23,18 @@ namespace altenter::quokahttp::detail
     class qlistener 
     {
         public:
-            qlistener(qlog_manager& log_manager);
+            qlistener(qrouter& router, qlog_manager& log_manager);
             ~qlistener();
 
             void listen();
             void set_socket(int qs_socket);
 
             void process(int socket);
-        private:
+        private:    
             bool is_running;
-
+        
             int qs_socket;
+            qrouter& router;
             qlog_manager& log_manager;
             qrequest_pool pool;
     };
