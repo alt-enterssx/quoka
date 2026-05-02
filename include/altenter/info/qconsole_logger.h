@@ -53,7 +53,7 @@ namespace altenter::quokahttp
             void log(const std::string& msg) override;
             void log(const std::string& msg, detail::log_type type = detail::log_type::INFO) override;
             
-            private:
+        private:
             std::queue<log_message> log_messages;
         
             std::mutex mtx;

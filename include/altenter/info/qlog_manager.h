@@ -1,17 +1,23 @@
 #pragma once 
 
-#include <memory>
 #include <vector>
 #include <sstream>
+#include <memory>
 #include "altenter/detail/q_i_logger.h"
 
 namespace altenter::quokahttp::detail 
 {
     class qlog_manager 
     {
+        protected:
+           qlog_manager();
+           ~qlog_manager();
+
         public:
-            qlog_manager();
-            ~qlog_manager();
+            qlog_manager(const qlog_manager&) = delete;
+            void operator=(const qlog_manager&) = delete;
+
+            static qlog_manager& get_instance();
 
             void add_logger(std::shared_ptr<q_i_logger> logger);
             void log(const std::string& msg, log_type type);

@@ -19,7 +19,7 @@ namespace altenter::quokahttp
     class qresponse 
     {
         public:
-            qresponse(detail::qlog_manager& log_manager);
+            qresponse();
             ~qresponse();
 
             void generate();
@@ -33,8 +33,6 @@ namespace altenter::quokahttp
             std::string get_raw_data();
 
         private:
-            detail::qlog_manager& log_manager;
-
             std::string raw_data;
             int status_code;
             std::string status_msg;

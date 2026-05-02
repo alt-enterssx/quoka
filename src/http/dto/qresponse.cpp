@@ -2,7 +2,7 @@
 
 using namespace altenter::quokahttp;
 
-qresponse::qresponse(detail::qlog_manager& log_manager): log_manager(log_manager), http_version("HTTP/1.1") {}
+qresponse::qresponse(): http_version("HTTP/1.1") {}
 qresponse::~qresponse() {}
 
 void qresponse::generate() {

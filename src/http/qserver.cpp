@@ -2,9 +2,9 @@
 
 using namespace altenter::quokahttp;
 
-qserver::qserver(): socket(this->log_manager), listener(this->router, this->log_manager), router(this->log_manager) {
-    std::shared_ptr<qconsole_logger> consoleLogger = std::make_shared<qconsole_logger>();
-    this->log_manager.add_logger(consoleLogger);
+qserver::qserver(): listener(this->router) {
+    std::shared_ptr<detail::q_i_logger> c_logger = std::make_shared<qconsole_logger>();
+    detail::qlog_manager::get_instance().add_logger(c_logger);
 }
 
 qserver::~qserver() {
@@ -13,7 +13,7 @@ qserver::~qserver() {
 
 void qserver::run(int port) {
     if (port < 0x0 || port > 0xFFFF) {
-        this->log_manager.logFormat("Argument port is invalid: ({}), gets default port: ({})", detail::log_type::WARNING,
+        detail::qlog_manager::get_instance().logFormat("Argument port is invalid: ({}), gets default port: ({})", detail::log_type::WARNING,
             port, DEFAULT_PORT_START);
         
         this->qs_port = DEFAULT_PORT_START;
@@ -24,15 +24,15 @@ void qserver::run(int port) {
         this->socket.bind_address(this->qs_port);
 
         this->is_running = true;
-        this->log_manager.logFormat("Server started and running: http://{}:{}", detail::log_type::INFO, LOCAL_ADDRESS, this->qs_port);
+        detail::qlog_manager::get_instance().logFormat("Server started and running: http://{}:{}", detail::log_type::INFO, LOCAL_ADDRESS, this->qs_port);
 
         listener.set_socket(this->socket.get_socket());
         listener.listen();
     } catch(qexception& ex) {
         detail::log_type typeFromExc = (ex.get_type() == exception_type::ERROR) ? detail::log_type::ERROR : detail::log_type::CRITICAL;
-        this->log_manager.log(ex.what(), typeFromExc);
+        detail::qlog_manager::get_instance().log(ex.what(), typeFromExc);
 
-        this->log_manager.shutdown();       
+        detail::qlog_manager::get_instance().shutdown();       
 
         if (ex.get_type() == exception_type::CRITICAL) { exit(EXIT_FAILURE); }
     }   

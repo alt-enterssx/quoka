@@ -46,7 +46,6 @@ namespace altenter::quokahttp
 
             // | Details
             detail::qtcp_socket socket;
-            detail::qlog_manager log_manager;
             detail::qlistener listener;
     };
 }

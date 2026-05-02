@@ -16,7 +16,7 @@ namespace altenter::quokahttp::detail
     class qtcp_socket 
     {
         public:
-            qtcp_socket(qlog_manager& log_manager);
+            qtcp_socket();
             ~qtcp_socket();
 
             void init_socket();
@@ -28,7 +28,5 @@ namespace altenter::quokahttp::detail
         private:
             int qs_socket;
             struct sockaddr_in qs_address;
-
-            qlog_manager& log_manager;
    };
 }

@@ -2,7 +2,7 @@
 
 using namespace altenter::quokahttp::detail;
 
-qlistener::qlistener(qrouter& router, qlog_manager& log_manager): is_running(true), router(router), log_manager(log_manager), qs_socket(-1), pool() {}
+qlistener::qlistener(qrouter& router): is_running(true), router(router), qs_socket(-1), pool() {}
 
 qlistener::~qlistener() { this->is_running = false; }
 
@@ -14,7 +14,7 @@ void qlistener::listen() {
         throw qexception(log_msg.str(), exception_type::CRITICAL);
     }
 
-    this->log_manager.log("Server started to listening now", log_type::INFO);
+    detail::qlog_manager::get_instance().log("Server started to listening now", log_type::INFO);
 
     while (this->is_running) {
 
@@ -28,14 +28,14 @@ void qlistener::listen() {
         );
 
         if (client_sock == -1) {
-            log_manager.logFormat("Error in accept ({})", log_type::ERROR, std::strerror(errno));
+            detail::qlog_manager::get_instance().logFormat("Error in accept ({})", log_type::ERROR, std::strerror(errno));
             continue;
         }
 
         char ip_str[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &client_addr.sin_addr, ip_str, INET_ADDRSTRLEN);
 
-        log_manager.logFormat("[connection] client={}:{}", log_type::DEBUG, ip_str, ntohs(client_addr.sin_port));
+        detail::qlog_manager::get_instance().logFormat("[connection] client={}:{}", log_type::DEBUG, ip_str, ntohs(client_addr.sin_port));
 
         qrequest_item item([this](int socket) {
             this->process(socket);
@@ -54,33 +54,34 @@ void qlistener::process(int socket) {
     int recv_out = recv(socket, buffer, buff_siz, 0);
 
     if (recv_out == -1) {
-        this->log_manager.logFormat("Error get data from connection ({})", log_type::ERROR, std::strerror(errno));
+        detail::qlog_manager::get_instance().logFormat("Error get data from connection ({})", log_type::ERROR, std::strerror(errno));
 
         close(socket);
         return; 
     } else if (recv_out == 0) {
-        this->log_manager.log("[connection] closed", log_type::DEBUG);
+        detail::qlog_manager::get_instance().log("[connection] closed", log_type::DEBUG);
 
         close(socket);
         return;
     } else {
         std::string buffer_str = buffer;
-        qrequest request(buffer_str, this->log_manager);
+        qrequest request(buffer_str);
         request.parse();
-        this->log_manager.logFormat("[connection] request uri: {}, method: {}, version: {}", log_type::INFO, request.get_uri(), request.get_method(), request.get_http_version());
+        detail::qlog_manager::get_instance().logFormat("[connection] request uri: {}, method: {}, version: {}", log_type::INFO, request.get_uri(), request.get_method(), request.get_http_version());
         
-        qresponse response(this->log_manager);
+        qresponse response;
         this->router.endpoint(request.get_method(), request.get_uri(), request, response);
         response.generate();
         std::string raw_data = response.get_raw_data();
 
         if (send(socket, raw_data.c_str(), raw_data.size(), 0) == -1) {
-           this->log_manager.logFormat("Error send data: ({})", log_type::ERROR, std::strerror(errno));    
+           detail::qlog_manager::get_instance().logFormat("Error send data: ({})", log_type::ERROR, std::strerror(errno));    
             close(socket);
 
             return;
         }
 
+        detail::qlog_manager::get_instance().log("[connection] response send successfully", log_type::INFO);
     }
 
     delete[] buffer;

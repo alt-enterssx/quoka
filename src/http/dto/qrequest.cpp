@@ -2,7 +2,7 @@
 
 using namespace altenter::quokahttp;
 
-qrequest::qrequest(std::string& raw_data, detail::qlog_manager& log_manager): raw_data(std::move(raw_data)), log_manager(log_manager) {}
+qrequest::qrequest(std::string& raw_data): raw_data(std::move(raw_data)) {}
 
 qrequest::~qrequest() {}
 
@@ -54,7 +54,7 @@ std::string qrequest::get_uri() { return this->uri; }
 
 std::string qrequest::get_header(const std::string& header) { 
     if (this->headers_map.find(header) == this->headers_map.end()) {
-        this->log_manager.logFormat("not found header: {}", detail::log_type::WARNING, header);
+        detail::qlog_manager::get_instance().logFormat("not found header: {}", detail::log_type::WARNING, header);
         return "";
     } 
 

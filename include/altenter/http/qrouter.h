@@ -13,7 +13,7 @@ namespace altenter::quokahttp
     class qrouter
     {
         public:
-            qrouter(detail::qlog_manager& log_manager);
+            qrouter();
             ~qrouter();
 
             void endpoint(const std::string& method, const std::string uri, qrequest& request, qresponse& response);
@@ -26,8 +26,6 @@ namespace altenter::quokahttp
             void options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
 
         private:
-            detail::qlog_manager& log_manager;
-
             std::unordered_map<std::string, std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>>*> methods_map;
             std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> get_map;
             std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> post_map;

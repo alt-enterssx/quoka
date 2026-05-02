@@ -12,7 +12,7 @@ namespace altenter::quokahttp
     class qrequest 
     {
     public:
-        qrequest(std::string& raw_data, detail::qlog_manager& log_manager);
+        qrequest(std::string& raw_data);
         ~qrequest();
 
         void parse();
@@ -25,8 +25,6 @@ namespace altenter::quokahttp
         std::string get_http_version();
 
     private:
-        detail::qlog_manager& log_manager;
-
         std::string raw_data;
 
         std::string http_version;

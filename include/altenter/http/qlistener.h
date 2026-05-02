@@ -23,7 +23,7 @@ namespace altenter::quokahttp::detail
     class qlistener 
     {
         public:
-            qlistener(qrouter& router, qlog_manager& log_manager);
+            qlistener(qrouter& router);
             ~qlistener();
 
             void listen();
@@ -35,7 +35,6 @@ namespace altenter::quokahttp::detail
         
             int qs_socket;
             qrouter& router;
-            qlog_manager& log_manager;
             qrequest_pool pool;
     };
 }
