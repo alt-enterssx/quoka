@@ -54,7 +54,7 @@ std::string qrequest::get_uri() { return this->uri; }
 
 std::string qrequest::get_header(const std::string& header) { 
     if (this->headers_map.find(header) == this->headers_map.end()) {
-        detail::qlog_manager::get_instance().logFormat("not found header: {}", detail::log_type::WARNING, header);
+        detail::qlog_manager::manager().logFormat("not found header: {}", detail::log_type::WARNING, header);
         return "";
     } 
 

@@ -18,7 +18,7 @@ namespace altenter::quokahttp::detail
             qlog_manager(const qlog_manager&) = delete;
             void operator=(const qlog_manager&) = delete;
 
-            static qlog_manager& get_instance();
+            static qlog_manager& manager();
 
             void log(const std::string& msg, log_type type);
             void set_flag(uint8_t flag);

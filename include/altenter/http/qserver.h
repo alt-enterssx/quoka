@@ -49,6 +49,8 @@ namespace altenter::quokahttp
             void patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
             void options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
 
+            void set_not_found(std::function<void(qrequest& request, qresponse& response)> not_found);
+            
         private:
 
             // | Datas

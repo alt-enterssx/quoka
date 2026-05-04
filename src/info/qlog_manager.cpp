@@ -10,9 +10,9 @@ qlog_manager::~qlog_manager() {
     }
 }
 
-qlog_manager& qlog_manager::get_instance() { 
-    static qlog_manager manager;
-    return manager;
+qlog_manager& qlog_manager::manager() { 
+    static qlog_manager instance;
+    return instance;
 }
 
 void qlog_manager::log(const std::string& msg, log_type type) {

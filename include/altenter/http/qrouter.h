@@ -25,7 +25,13 @@ namespace altenter::quokahttp
             void patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
             void options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
 
+            void set_not_found(std::function<void(qrequest& request, qresponse& response)> not_found);
+
         private:
+            void default_not_found(qrequest& request, qresponse& response);
+
+            std::function<void(qrequest& request, qresponse& response)> not_found;
+
             std::unordered_map<std::string, std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>>*> methods_map;
             std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> get_map;
             std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> post_map;
