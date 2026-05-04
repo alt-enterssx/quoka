@@ -14,6 +14,11 @@ qconsole_logger::~qconsole_logger() {
     }
 }
 
+qconsole_logger& qconsole_logger::logger() {
+    static qconsole_logger console_logger;
+    return console_logger;
+}
+
 void qconsole_logger::shutdown() {
     this->run = false;
     this->cv.notify_all();

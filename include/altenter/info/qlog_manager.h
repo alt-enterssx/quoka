@@ -3,7 +3,8 @@
 #include <vector>
 #include <sstream>
 #include <memory>
-#include "altenter/detail/q_i_logger.h"
+#include <cstdint>
+#include "altenter/info/qconsole_logger.h"
 
 namespace altenter::quokahttp::detail 
 {
@@ -19,8 +20,8 @@ namespace altenter::quokahttp::detail
 
             static qlog_manager& get_instance();
 
-            void add_logger(std::shared_ptr<q_i_logger> logger);
             void log(const std::string& msg, log_type type);
+            void set_flag(uint8_t flag);
             
             template<typename... Args>
             void logFormat(std::string_view fmt, log_type type, Args&&... args) {
@@ -62,6 +63,6 @@ namespace altenter::quokahttp::detail
             void shutdown();
 
         private:
-            std::vector<std::shared_ptr<q_i_logger>> loggers;
+            uint8_t flag;
     };
 }

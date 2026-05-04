@@ -44,9 +44,13 @@ namespace altenter::quokahttp
 
     class qconsole_logger: public detail::q_i_logger 
     {
-        public:
+        protected:
             qconsole_logger();
+        
+        public:
             ~qconsole_logger();
+
+            static qconsole_logger& logger();
 
             void shutdown() override;
 

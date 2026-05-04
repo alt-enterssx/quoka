@@ -3,8 +3,10 @@
 using namespace altenter::quokahttp;
 
 qserver::qserver(int port, bool console_log_status): qs_port(port), listener(this->router) {
-    std::shared_ptr<detail::q_i_logger> c_logger = std::make_shared<qconsole_logger>();
-    detail::qlog_manager::get_instance().add_logger(c_logger);
+    uint8_t flag;
+
+    if (console_log_status) { flag |= 0xF0; }
+    detail::qlog_manager::get_instance().set_flag(flag);
 }
 
 qserver::~qserver() {
