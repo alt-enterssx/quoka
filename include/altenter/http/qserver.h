@@ -22,11 +22,25 @@ namespace altenter::quokahttp
 {    
     class qserver 
     {
+        protected:
+            qserver(int port, bool console_log_status);
+        
         public:
-            qserver();
+            class builder 
+            {
+                public:
+                    builder& set_port(int port = DEFAULT_PORT_START);
+                    builder& set_console_logger(bool status = true);
+
+                    std::unique_ptr<qserver> build();
+                private:
+                    int port_;
+                    bool console_log_status_;
+            }; 
+
             ~qserver();
 
-            void run(int port = DEFAULT_PORT_START);
+            void run();
 
             void get_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
             void post_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);

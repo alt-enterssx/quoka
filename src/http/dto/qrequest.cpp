@@ -58,7 +58,12 @@ std::string qrequest::get_header(const std::string& header) {
         return "";
     } 
 
-    return this->headers_map.at(header);
+    std::string header_str = this->headers_map.at(header);
+    header_str.erase(std::remove_if(header_str.begin(), header_str.end(), [] (unsigned char c) -> bool {
+         return c == '\n' || c == '\r';
+    }), header_str.end());
+
+    return header_str;
 }
 
 std::string qrequest::get_method() { return this->method; }

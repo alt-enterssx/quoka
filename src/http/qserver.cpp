@@ -2,7 +2,7 @@
 
 using namespace altenter::quokahttp;
 
-qserver::qserver(): listener(this->router) {
+qserver::qserver(int port, bool console_log_status): qs_port(port), listener(this->router) {
     std::shared_ptr<detail::q_i_logger> c_logger = std::make_shared<qconsole_logger>();
     detail::qlog_manager::get_instance().add_logger(c_logger);
 }
@@ -11,14 +11,29 @@ qserver::~qserver() {
     this->is_running = false;
 }
 
-void qserver::run(int port) {
+qserver::builder& qserver::builder::set_port(int port) {
     if (port < 0x0 || port > 0xFFFF) {
         detail::qlog_manager::get_instance().logFormat("Argument port is invalid: ({}), gets default port: ({})", detail::log_type::WARNING,
             port, DEFAULT_PORT_START);
         
-        this->qs_port = DEFAULT_PORT_START;
-    } else { this->qs_port = port; }
+        this->port_ = DEFAULT_PORT_START;
+    } else { this->port_ = port; }
 
+    return *this;
+}
+
+qserver::builder& qserver::builder::set_console_logger(bool status) {
+    this->console_log_status_ = status;
+    return *this;
+}
+
+std::unique_ptr<qserver> qserver::builder::build() {
+    return std::unique_ptr<qserver>(
+        new qserver(this->port_, this->console_log_status_)
+    );
+}
+
+void qserver::run() {
     try {
         this->socket.init_socket();
         this->socket.bind_address(this->qs_port);
