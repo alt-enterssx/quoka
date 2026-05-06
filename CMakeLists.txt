@@ -14,6 +14,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/http/qrouter.cpp
     src/http/dto/qrequest.cpp
     src/http/dto/qresponse.cpp
+    src/utils/qconfig.cpp
     src/detail/qtcp_sokcet.cpp
     src/detail/qrequest_pool.cpp
     src/qexception.cpp

@@ -2,36 +2,42 @@
 
 using namespace altenter::quokahttp;
 
-qserver::qserver(int port, bool console_log_status): qs_port(port), listener(this->router) {
-    uint8_t flag;
-
-    if (console_log_status) { flag |= 0xF0; }
-    detail::qlog_manager::manager().set_flag(flag);
+qserver::qserver(int port): qs_port(port), listener(this->router) {
 }
 
 qserver::~qserver() {
     this->is_running = false;
 }
 
+qserver::builder::builder(): port_(-1) {}
+
 qserver::builder& qserver::builder::set_port(int port) {
-    if (port < 0x0 || port > 0xFFFF) {
-        detail::qlog_manager::manager().logFormat("Argument port is invalid: ({}), gets default port: ({})", detail::log_type::WARNING,
-            port, DEFAULT_PORT_START);
-        
-        this->port_ = DEFAULT_PORT_START;
-    } else { this->port_ = port; }
-
-    return *this;
-}
-
-qserver::builder& qserver::builder::set_console_logger(bool status) {
-    this->console_log_status_ = status;
+    this->port_ = port;
     return *this;
 }
 
 std::unique_ptr<qserver> qserver::builder::build() {
+    if (port_ == -1) {
+        int conf_port = qconfig::qoption<int>::option("server.port");
+
+        if (conf_port != 0) {
+            port_ = conf_port;
+        }
+    }
+
+    if (port_ <= 0 || port_ > 0xFFFF) {
+        detail::qlog_manager::manager().logFormat(
+            "Argument port is invalid: ({}), gets default port: ({})",
+            detail::log_type::WARNING,
+            port_,
+            DEFAULT_PORT_START
+        );
+
+        port_ = DEFAULT_PORT_START;
+    }
+
     return std::unique_ptr<qserver>(
-        new qserver(this->port_, this->console_log_status_)
+        new qserver(this->port_)
     );
 }
 

@@ -6,6 +6,8 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
+#include "altenter/utils/qconfig.h"
+#include "altenter/info/qlog_manager.h"
 
 #define DEFAULT_THREADS_CNT 4
 
@@ -41,7 +43,7 @@ namespace altenter::quokahttp::detail
     class qrequest_pool
     {
         public:
-            qrequest_pool(int thread_cnt = DEFAULT_THREADS_CNT);
+            qrequest_pool();
             ~qrequest_pool();
 
             void add_task(qrequest_item& task);

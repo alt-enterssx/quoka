@@ -16,7 +16,19 @@ void qrequest_item::execute() {
     this->executor(this->client_socket);
 }
 
-qrequest_pool::qrequest_pool(int thread_cnt): running(true) {
+qrequest_pool::qrequest_pool(): running(true) {
+    int thread_cnt = -1;
+    int conf_threads = qconfig::qoption<int>::option("pool.threads");
+
+    if (conf_threads != 0) {
+        thread_cnt = conf_threads;
+    }
+    else {
+        thread_cnt = DEFAULT_THREADS_CNT;
+    }
+
+    qlog_manager::manager().logFormat("Request pool initialized with: {} threads", log_type::INFO, thread_cnt);
+
     for (int i = 0; i < thread_cnt; i++) {
         threads.emplace_back([this] () -> void {
             while(true) {

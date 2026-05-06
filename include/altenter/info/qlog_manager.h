@@ -21,7 +21,6 @@ namespace altenter::quokahttp::detail
             static qlog_manager& manager();
 
             void log(const std::string& msg, log_type type);
-            void set_flag(uint8_t flag);
             
             template<typename... Args>
             void logFormat(std::string_view fmt, log_type type, Args&&... args) {
@@ -63,6 +62,5 @@ namespace altenter::quokahttp::detail
             void shutdown();
 
         private:
-            uint8_t flag;
     };
 }

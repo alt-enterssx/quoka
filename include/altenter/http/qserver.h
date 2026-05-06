@@ -14,8 +14,9 @@
 #include "altenter/info/qlog_manager.h"
 #include "altenter/http/qlistener.h"
 #include "altenter/http/qrouter.h"
+#include "altenter/utils/qconfig.h"
 
-#define DEFAULT_PORT_START 2060
+#define DEFAULT_PORT_START 5050
 #define LOCAL_ADDRESS "127.0.0.1"
  
 namespace altenter::quokahttp 
@@ -23,19 +24,17 @@ namespace altenter::quokahttp
     class qserver 
     {
         protected:
-            qserver(int port, bool console_log_status);
+            qserver(int port);
         
         public:
             class builder 
             {
                 public:
+                    builder();
                     builder& set_port(int port = DEFAULT_PORT_START);
-                    builder& set_console_logger(bool status = true);
-
                     std::unique_ptr<qserver> build();
                 private:
                     int port_;
-                    bool console_log_status_;
             }; 
 
             ~qserver();

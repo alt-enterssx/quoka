@@ -28,17 +28,11 @@ void qconsole_logger::shutdown() {
 }
 
 void qconsole_logger::log(const std::string& msg) {
-
     {
-
         std::lock_guard<std::mutex> lock(this->mtx);
-
         this->log_messages.emplace(std::move(msg), detail::log_type::INFO);
-
     } 
-
     this->cv.notify_one();
-
 }
 
 void qconsole_logger::log(const std::string& msg, detail::log_type type) {
