@@ -8,7 +8,7 @@
 #include "altenter/http/dto/qresponse.h"
 #include "altenter/info/qlog_manager.h"
 
-namespace altenter::quokahttp
+namespace altenter::quoka
 {
     class qrouter
     {

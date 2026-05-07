@@ -1,6 +1,6 @@
 #include "altenter/http/qlistener.h"
 
-using namespace altenter::quokahttp::detail;
+using namespace altenter::quoka::detail;
 
 qlistener::qlistener(qrouter& router): is_running(true), router(router), qs_socket(-1), pool() {}
 

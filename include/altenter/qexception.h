@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace altenter::quokahttp 
+namespace altenter::quoka 
 {    
     enum exception_type 
     {

@@ -1,6 +1,6 @@
 #include "altenter/detail/qrequest_pool.h"
 
-using namespace altenter::quokahttp::detail;
+using namespace altenter::quoka::detail;
 
 qrequest_item::qrequest_item(std::function<void(int)> func, int client_socket): id(-1), executor(func), status(request_status::QUEUE), client_socket(client_socket) {}
 qrequest_item::qrequest_item(): id(-1), status(request_status::QUEUE) {}

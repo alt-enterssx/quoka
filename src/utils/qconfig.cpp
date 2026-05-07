@@ -1,6 +1,6 @@
 #include "altenter/utils/qconfig.h"
 
-using namespace altenter::quokahttp;
+using namespace altenter::quoka;
 
 qconfig::qconfig(): finalize(false), conf_path({}) {}
 qconfig::~qconfig() {}

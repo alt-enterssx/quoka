@@ -18,7 +18,7 @@
 
 #define CLASSNAMELOG "qlistener"
 
-namespace altenter::quokahttp::detail 
+namespace altenter::quoka::detail 
 {
     class qlistener 
     {

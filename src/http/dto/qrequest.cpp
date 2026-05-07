@@ -1,6 +1,6 @@
 #include "altenter/http/dto/qrequest.h"
 
-using namespace altenter::quokahttp;
+using namespace altenter::quoka;
 
 qrequest::qrequest(std::string& raw_data): raw_data(std::move(raw_data)) {}
 

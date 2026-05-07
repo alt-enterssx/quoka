@@ -1,6 +1,6 @@
 #include "altenter/info/qlog_manager.h"
 
-using namespace altenter::quokahttp::detail;
+using namespace altenter::quoka::detail;
 
 qlog_manager::qlog_manager(): flag(0xF0) {}
 

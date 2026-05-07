@@ -7,7 +7,7 @@
 #include <cctype>
 #include "altenter/info/qlog_manager.h"
 
-namespace altenter::quokahttp
+namespace altenter::quoka
 {
     class qrequest 
     {

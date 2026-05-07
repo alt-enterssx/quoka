@@ -1,6 +1,6 @@
 #include "altenter/detail/qtcp_socket.h"
 
-using namespace altenter::quokahttp::detail;
+using namespace altenter::quoka::detail;
 
 qtcp_socket::qtcp_socket() {}
 qtcp_socket::~qtcp_socket() {}

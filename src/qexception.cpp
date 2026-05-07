@@ -1,6 +1,6 @@
 #include "altenter/qexception.h"
 
-using namespace altenter::quokahttp;
+using namespace altenter::quoka;
 
 qexception::qexception(const std::string&& msg, exception_type type): std::runtime_error(msg), exc_type(type) {}
 

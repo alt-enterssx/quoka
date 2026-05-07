@@ -11,7 +11,7 @@
 #include "altenter/info/qlog_manager.h"
 #include "altenter/qexception.h"
 
-namespace altenter::quokahttp 
+namespace altenter::quoka 
 {
     class qconfig 
     {

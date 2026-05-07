@@ -1,6 +1,6 @@
 #include "altenter/http/qserver.h"
 
-using namespace altenter::quokahttp;
+using namespace altenter::quoka;
 
 qserver::qserver(int port): qs_port(port), listener(this->router) {
 }

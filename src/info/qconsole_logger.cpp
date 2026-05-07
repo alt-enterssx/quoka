@@ -1,6 +1,6 @@
 #include "altenter/info/qconsole_logger.h"
 
-using namespace altenter::quokahttp;
+using namespace altenter::quoka;
 
 qconsole_logger::qconsole_logger() {
     this->thrd = std::thread(&qconsole_logger::process, this);

@@ -1,6 +1,6 @@
 #include "altenter/http/dto/qresponse.h"
 
-using namespace altenter::quokahttp;
+using namespace altenter::quoka;
 
 qresponse::qresponse(int status_code, std::string status_msg, std::string http_version, 
                 std::vector<qheader> headers, std::string body): status_code(status_code), status_msg(status_msg), http_version(http_version), headers(std::move(headers)), body(body) {}

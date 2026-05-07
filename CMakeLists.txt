@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(PROJECT_NAME quoka_http)
+set(PROJECT_NAME quoka)
 set(CMAKE_BUILD_TYPE Debug)
 project(${PROJECT_NAME} LANGUAGES CXX)
 

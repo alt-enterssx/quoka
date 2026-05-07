@@ -19,7 +19,7 @@
 #define DEFAULT_PORT_START 5050
 #define LOCAL_ADDRESS "127.0.0.1"
  
-namespace altenter::quokahttp 
+namespace altenter::quoka 
 {    
     class qserver 
     {

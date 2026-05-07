@@ -7,7 +7,7 @@
 #include "altenter/info/qconsole_logger.h"
 #include "altenter/qexception.h"
 
-namespace altenter::quokahttp::detail 
+namespace altenter::quoka::detail 
 {
     class qlog_manager 
     {

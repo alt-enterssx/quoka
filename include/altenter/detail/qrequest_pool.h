@@ -11,7 +11,7 @@
 
 #define DEFAULT_THREADS_CNT 4
 
-namespace altenter::quokahttp::detail
+namespace altenter::quoka::detail
 {    
     enum request_status
     {

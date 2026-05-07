@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace altenter::quokahttp::detail 
+namespace altenter::quoka::detail 
 {
     enum log_type 
     {

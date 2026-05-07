@@ -1,6 +1,6 @@
 #include "altenter/http/qrouter.h"
 
-using namespace altenter::quokahttp;
+using namespace altenter::quoka;
 
 qrouter::qrouter() {
     this->methods_map = {
