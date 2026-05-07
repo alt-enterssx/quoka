@@ -5,6 +5,7 @@
 #include <memory>
 #include <cstdint>
 #include "altenter/info/qconsole_logger.h"
+#include "altenter/qexception.h"
 
 namespace altenter::quokahttp::detail 
 {
@@ -21,6 +22,8 @@ namespace altenter::quokahttp::detail
             static qlog_manager& manager();
 
             void log(const std::string& msg, log_type type);
+            void log(const std::string& msg, exception_type type);
+            void set_console(bool status);
             
             template<typename... Args>
             void logFormat(std::string_view fmt, log_type type, Args&&... args) {
@@ -49,7 +52,8 @@ namespace altenter::quokahttp::detail
 
                     if (arg_index < sizeof...(Args)) {
                         ss << arg_strings[arg_index++];
-                    } else {
+                    } 
+                    else {
                         ss << "{}";
                     }
 
@@ -62,5 +66,6 @@ namespace altenter::quokahttp::detail
             void shutdown();
 
         private:
+            uint8_t flag;
     };
 }

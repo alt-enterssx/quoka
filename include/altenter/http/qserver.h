@@ -31,7 +31,8 @@ namespace altenter::quokahttp
             {
                 public:
                     builder();
-                    builder& set_port(int port = DEFAULT_PORT_START);
+
+                    builder& set_port(int port);
                     std::unique_ptr<qserver> build();
                 private:
                     int port_;

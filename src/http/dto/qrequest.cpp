@@ -30,7 +30,9 @@ void qrequest::parse() {
         int pre_body_line;
 
         for (int i = 0; i < lines.size(); i++) {
-            if (lines.at(i).size() == 1 && lines.at(i)[0] == '\r') {
+            if (
+                lines.at(i).size() == 1 && lines.at(i)[0] == '\r'
+            ) {
                 pre_body_line = i;
             }
         }
@@ -53,8 +55,14 @@ std::string qrequest::get_raw_data() { return this->raw_data; }
 std::string qrequest::get_uri() { return this->uri; }
 
 std::string qrequest::get_header(const std::string& header) { 
-    if (this->headers_map.find(header) == this->headers_map.end()) {
-        detail::qlog_manager::manager().logFormat("not found header: {}", detail::log_type::WARNING, header);
+    if (
+        this->headers_map.find(header) == this->headers_map.end()
+    ) {
+        detail::qlog_manager::manager().logFormat(
+            "not found header: {}", 
+            detail::log_type::WARNING, 
+            header
+        );
         return "";
     } 
 

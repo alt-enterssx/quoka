@@ -17,19 +17,15 @@ void qrequest_item::execute() {
 }
 
 qrequest_pool::qrequest_pool(): running(true) {
-    int thread_cnt = -1;
-    int conf_threads = qconfig::qoption<int>::option("pool.threads");
+    int thread_ctn = qconfig::qoption<int>().option("pool.threads").default_value(DEFAULT_THREADS_CNT).value();
 
-    if (conf_threads != 0) {
-        thread_cnt = conf_threads;
-    }
-    else {
-        thread_cnt = DEFAULT_THREADS_CNT;
-    }
+    qlog_manager::manager().logFormat(
+        "Request pool initialized with: {} threads",
+        log_type::INFO, 
+        thread_ctn
+    );
 
-    qlog_manager::manager().logFormat("Request pool initialized with: {} threads", log_type::INFO, thread_cnt);
-
-    for (int i = 0; i < thread_cnt; i++) {
+    for (int i = 0; i < thread_ctn; i++) {
         threads.emplace_back([this] () -> void {
             while(true) {
                 qrequest_item task_item;
@@ -40,7 +36,9 @@ qrequest_pool::qrequest_pool(): running(true) {
                         return !this->requests.empty() && this->running;
                     });
 
-                    if (!this->running && this->requests.empty()) { return; }
+                    if (
+                        !this->running && this->requests.empty()
+                    ) { return; }
 
                     task_item = std::move(this->requests.back());
                     this->requests.pop();

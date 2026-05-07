@@ -18,14 +18,12 @@ qserver::builder& qserver::builder::set_port(int port) {
 
 std::unique_ptr<qserver> qserver::builder::build() {
     if (port_ == -1) {
-        int conf_port = qconfig::qoption<int>::option("server.port");
-
-        if (conf_port != 0) {
-            port_ = conf_port;
-        }
+        port_ = qconfig::qoption<int>().option("server.port").default_value(DEFAULT_PORT_START).value();
     }
 
-    if (port_ <= 0 || port_ > 0xFFFF) {
+    if (
+        port_ <= 0 || port_ > 0xFFFF
+    ) {
         detail::qlog_manager::manager().logFormat(
             "Argument port is invalid: ({}), gets default port: ({})",
             detail::log_type::WARNING,
@@ -47,13 +45,20 @@ void qserver::run() {
         this->socket.bind_address(this->qs_port);
 
         this->is_running = true;
-        detail::qlog_manager::manager().logFormat("Server started and running: http://{}:{}", detail::log_type::INFO, LOCAL_ADDRESS, this->qs_port);
+        detail::qlog_manager::manager().logFormat(
+            "Server started and running: http://{}:{}", 
+            detail::log_type::INFO, 
+            LOCAL_ADDRESS, 
+            this->qs_port
+        );
 
         listener.set_socket(this->socket.get_socket());
         listener.listen();
     } catch(qexception& ex) {
-        detail::log_type typeFromExc = (ex.get_type() == exception_type::ERROR) ? detail::log_type::ERROR : detail::log_type::CRITICAL;
-        detail::qlog_manager::manager().log(ex.what(), typeFromExc);
+        detail::qlog_manager::manager().log(
+            ex.what(), 
+            ex.get_type()
+        );
 
         detail::qlog_manager::manager().shutdown();       
 

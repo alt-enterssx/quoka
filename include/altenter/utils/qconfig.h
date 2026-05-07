@@ -6,7 +6,10 @@
 #include <unordered_map>
 #include <typeinfo>
 #include <type_traits>
+#include <memory>
+#include <algorithm>
 #include "altenter/info/qlog_manager.h"
+#include "altenter/qexception.h"
 
 namespace altenter::quokahttp 
 {
@@ -21,26 +24,43 @@ namespace altenter::quokahttp
             class qoption
             {
                 public:
-                    static T option(const std::string& key) {
-                        std::string value = qconfig::config().get(key);
-                        if (value.empty()) {
-                            return T{};
+                    qoption(): default_val(nullptr) {} 
+
+                    qoption& option(const std::string& key) {
+                        this->value_str = qconfig::config().get(key);
+                        return *this;
+                    }
+                    
+                    qoption& default_value(T value) {
+                        this->default_val = std::make_unique<T>(value);
+                        return *this;
+                    }
+
+                    T value() {
+                        if (this->value_str.empty()) {
+                            if (default_val == nullptr) {
+                                throw qexception("Error in get config value", exception_type::ERROR);
+                            }
+                            else {
+                                return *default_val;
+                            }
                         }
 
-                        if constexpr (std::is_same<T, int>::value) {
-                            int integer = std::stoi(value);
-                            return integer;
+                        if constexpr (std::is_same<T, int>::value) { 
+                            return stoi(this->value_str);
                         }
                         else if constexpr (std::is_same<T, bool>::value) {
-                            bool boolean;
-                            std::istringstream(value) >> std::boolalpha >> boolean;
-                            return boolean;
+                            std::transform(this->value_str.begin(), this->value_str.end(), this->value_str.begin(), ::tolower);
+                            return this->value_str == "true" || this->value_str == "1";
                         }
                         else if constexpr (std::is_same<T, std::string>::value) {
-                            std::string stroke = value;
-                            return stroke;
+                            return this->value_str;
                         }
                     }
+                
+                    private:
+                        std::string value_str; 
+                        std::unique_ptr<T> default_val;
             };
 
             qconfig(const qconfig&) = delete;
@@ -54,6 +74,7 @@ namespace altenter::quokahttp
 
         private:
             std::vector<std::string> split(std::string text, std::string delimiter);
+            bool is_valid_path();
 
             std::string conf_path;
             bool finalize;

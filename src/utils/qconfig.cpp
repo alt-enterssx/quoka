@@ -12,17 +12,35 @@ qconfig& qconfig::config() {
 
 void qconfig::init() {
     if (finalize) {
-        detail::qlog_manager::manager().log("Config initialized before", detail::log_type::ERROR);
+        detail::qlog_manager::manager().log(
+            "Config initialized before", 
+            detail::log_type::ERROR
+        );
         return;
     }
     else if (this->conf_path.empty()) {
-        detail::qlog_manager::manager().log("Path to config file is empty", detail::log_type::ERROR);
+        detail::qlog_manager::manager().log(
+            "Path to config file is empty", 
+            detail::log_type::ERROR
+        );
+        return;
+    }
+    else if (!this->is_valid_path()) {
+        detail::qlog_manager::manager().logFormat(
+            "Path to config is invalid: {}", 
+            detail::log_type::ERROR,
+            this->conf_path
+        );
         return;
     }
 
     std::ifstream conf_file(this->conf_path);
     if (!conf_file.is_open()) {
-        detail::qlog_manager::manager().logFormat("Error in open config file: {}", detail::log_type::ERROR, this->conf_path);
+        detail::qlog_manager::manager().logFormat(
+            "Error in open config file: {}", 
+            detail::log_type::ERROR, 
+            this->conf_path
+        );
         return;
     }
 
@@ -38,14 +56,23 @@ void qconfig::init() {
         }
     }
 
-    detail::qlog_manager::manager().log("Config initialized successfully", detail::log_type::INFO);
+    detail::qlog_manager::manager().log(
+        "Config initialized successfully", 
+        detail::log_type::INFO
+    );
     finalize = true;
 }
 
 void qconfig::set_path(const std::string& path) { this->conf_path = std::move(path); }
 std::string qconfig::get(const std::string& key) {
-    if (this->conf_map.find(key) == this->conf_map.end()) {
-        detail::qlog_manager::manager().logFormat("Error in get conf parameter with key: {}", detail::log_type::ERROR, key);
+    if (
+        this->conf_map.find(key) == this->conf_map.end()
+    ) {
+        detail::qlog_manager::manager().logFormat(
+            "Error in get conf parameter with key: {}", 
+            detail::log_type::WARNING, 
+            key
+        );
         return {};
     }
 
@@ -69,3 +96,13 @@ std::vector<std::string> qconfig::split(std::string text, std::string delimiter)
 
     return seglist;
 } 
+
+bool qconfig::is_valid_path() {
+    std::vector<std::string> params = this->split(this->conf_path, "/");
+    if (params.empty()) { return false; }
+
+    std::vector<std::string> file_params = this->split(params.at(params.size() - 1), ".");
+    if (file_params.size() < 2) { return false; }
+
+    return file_params.at(file_params.size() - 1) == "conf";
+}
