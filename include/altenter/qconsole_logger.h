@@ -1,6 +1,6 @@
 #pragma once
 
-#include "altenter/detail/q_i_logger.h"
+#include "altenter/q_i_logger.h"
 
 #include <iostream>
 #include <string>

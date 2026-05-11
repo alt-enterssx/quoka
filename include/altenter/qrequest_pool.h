@@ -6,8 +6,8 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
-#include "altenter/utils/qconfig.h"
-#include "altenter/info/qlog_manager.h"
+#include "altenter/qconfig.h"
+#include "altenter/qlog_manager.h"
 
 #define DEFAULT_THREADS_CNT 4
 

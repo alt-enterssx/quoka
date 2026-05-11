@@ -9,7 +9,7 @@
 #include <cstring>
 #include <sstream>
 #include "altenter/qexception.h"
-#include "altenter/info/qlog_manager.h"
+#include "altenter/qlog_manager.h"
 
 namespace altenter::quoka::detail 
 {   

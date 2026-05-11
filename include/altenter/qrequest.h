@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
-#include "altenter/info/qlog_manager.h"
+#include "altenter/qlog_manager.h"
 
 namespace altenter::quoka
 {

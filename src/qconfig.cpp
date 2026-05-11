@@ -1,4 +1,4 @@
-#include "altenter/utils/qconfig.h"
+#include "altenter/qconfig.h"
 
 using namespace altenter::quoka;
 

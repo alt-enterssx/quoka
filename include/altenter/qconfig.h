@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <memory>
 #include <algorithm>
-#include "altenter/info/qlog_manager.h"
+#include "altenter/qlog_manager.h"
 #include "altenter/qexception.h"
 
 namespace altenter::quoka 

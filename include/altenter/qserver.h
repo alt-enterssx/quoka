@@ -7,14 +7,14 @@
 #include <sstream>
 #include <unistd.h>
 #include <functional>
-#include "altenter/detail/q_i_logger.h"
-#include "altenter/info/qconsole_logger.h"
-#include "altenter/detail/qtcp_socket.h"
+#include "altenter/q_i_logger.h"
+#include "altenter/qconsole_logger.h"
+#include "altenter/qtcp_socket.h"
 #include "altenter/qexception.h"
-#include "altenter/info/qlog_manager.h"
-#include "altenter/http/qlistener.h"
-#include "altenter/http/qrouter.h"
-#include "altenter/utils/qconfig.h"
+#include "altenter/qlog_manager.h"
+#include "altenter/qlistener.h"
+#include "altenter/qrouter.h"
+#include "altenter/qconfig.h"
 
 #define DEFAULT_PORT_START 5050
 #define LOCAL_ADDRESS "127.0.0.1"

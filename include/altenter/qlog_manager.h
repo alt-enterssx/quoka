@@ -4,7 +4,7 @@
 #include <sstream>
 #include <memory>
 #include <cstdint>
-#include "altenter/info/qconsole_logger.h"
+#include "altenter/qconsole_logger.h"
 #include "altenter/qexception.h"
 
 namespace altenter::quoka::detail 

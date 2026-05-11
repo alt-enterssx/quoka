@@ -7,16 +7,16 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 add_library(${PROJECT_NAME} STATIC)
 
 target_sources(${PROJECT_NAME} PRIVATE 
-    src/info/qconsole_logger.cpp
-    src/info/qlog_manager.cpp
-    src/http/qserver.cpp
-    src/http/qlistener.cpp
-    src/http/qrouter.cpp
-    src/http/dto/qrequest.cpp
-    src/http/dto/qresponse.cpp
-    src/utils/qconfig.cpp
-    src/detail/qtcp_sokcet.cpp
-    src/detail/qrequest_pool.cpp
+    src/qconsole_logger.cpp
+    src/qlog_manager.cpp
+    src/qserver.cpp
+    src/qlistener.cpp
+    src/qrouter.cpp
+    src/qrequest.cpp
+    src/qresponse.cpp
+    src/qconfig.cpp
+    src/qtcp_sokcet.cpp
+    src/qrequest_pool.cpp
     src/qexception.cpp
 )
 

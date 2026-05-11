@@ -1,4 +1,4 @@
-#include "altenter/http/dto/qrequest.h"
+#include "altenter/qrequest.h"
 
 using namespace altenter::quoka;
 

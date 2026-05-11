@@ -1,4 +1,4 @@
-#include "altenter/http/dto/qresponse.h"
+#include "altenter/qresponse.h"
 
 using namespace altenter::quoka;
 

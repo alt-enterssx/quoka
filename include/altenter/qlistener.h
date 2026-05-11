@@ -8,12 +8,12 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <iostream>
-#include "altenter/http/dto/qrequest.h"
-#include "altenter/http/dto/qresponse.h"
-#include "altenter/http/qrouter.h"
-#include "altenter/info/qlog_manager.h"
-#include "altenter/detail/qrequest_pool.h"
-#include "altenter/detail/q_i_logger.h"
+#include "altenter/qrequest.h"
+#include "altenter/qresponse.h"
+#include "altenter/qrouter.h"
+#include "altenter/qlog_manager.h"
+#include "altenter/qrequest_pool.h"
+#include "altenter/q_i_logger.h"
 #include "altenter/qexception.h"
 
 #define CLASSNAMELOG "qlistener"

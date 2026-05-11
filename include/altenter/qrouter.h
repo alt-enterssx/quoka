@@ -4,9 +4,9 @@
 #include <memory>
 #include <functional>
 #include <optional>
-#include "altenter/http/dto/qrequest.h"
-#include "altenter/http/dto/qresponse.h"
-#include "altenter/info/qlog_manager.h"
+#include "altenter/qrequest.h"
+#include "altenter/qresponse.h"
+#include "altenter/qlog_manager.h"
 
 namespace altenter::quoka
 {
