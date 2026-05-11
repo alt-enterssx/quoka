@@ -50,6 +50,26 @@ void qrequest::parse() {
     }
 }
 
+void qrequest::add_param(std::string& param, std::string& value) {
+    this->params_map.insert({param, value});
+}
+
+std::string qrequest::get_param(const std::string& param) {
+    if (
+        this->params_map.find(param) == this->params_map.end()
+    ) {
+        detail::qlog_manager::manager().logFormat(
+            "not found parameter: {}", 
+            detail::log_type::WARNING, 
+            param
+        );
+        return "";
+    } 
+
+    std::string param_str = this->params_map.at(param);
+    return param_str;
+}
+
 std::string qrequest::get_raw_data() { return this->raw_data; }
 
 std::string qrequest::get_uri() { return this->uri; }

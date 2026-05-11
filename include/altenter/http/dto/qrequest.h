@@ -17,6 +17,9 @@ namespace altenter::quoka
 
         void parse();
 
+        void add_param(std::string& param, std::string& value);
+        std::string get_param(const std::string& param);
+
         std::string get_raw_data();
         std::string get_uri();
         std::string get_header(const std::string& header);
@@ -30,6 +33,7 @@ namespace altenter::quoka
         std::string http_version;
         std::string uri;
         std::unordered_map<std::string, std::string> headers_map;
+        std::unordered_map<std::string, std::string> params_map;
         std::string method;
         std::string body;
 

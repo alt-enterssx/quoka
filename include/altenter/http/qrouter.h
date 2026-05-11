@@ -1,9 +1,9 @@
 #pragma once
 
 #include <unordered_map>
-#include <string>
+#include <memory>
 #include <functional>
-#include <iostream>
+#include <optional>
 #include "altenter/http/dto/qrequest.h"
 #include "altenter/http/dto/qresponse.h"
 #include "altenter/info/qlog_manager.h"
@@ -12,32 +12,67 @@ namespace altenter::quoka
 {
     class qrouter
     {
-        public:
+        protected:
             qrouter();
             ~qrouter();
 
-            void endpoint(const std::string& method, const std::string uri, qrequest& request, qresponse& response);
+        public:
+            static qrouter& router();
 
-            void get_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
-            void post_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
-            void put_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
-            void delete_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
-            void patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
-            void options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec_point);
+            void endpoint(const std::string& method, const std::string& uri, qrequest& request, qresponse& reponse);
+            void get_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle);
+            void put_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle);
+            void post_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle);
+            void head_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle);
+            void delete_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle);
+            void patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle);
+            void options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle);
 
             void set_not_found(std::function<void(qrequest& request, qresponse& response)> not_found);
 
+
         private:
             void default_not_found(qrequest& request, qresponse& response);
-
             std::function<void(qrequest& request, qresponse& response)> not_found;
 
-            std::unordered_map<std::string, std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>>*> methods_map;
-            std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> get_map;
-            std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> post_map;
-            std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> put_map;
-            std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> delete_map;
-            std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> patch_map;
-            std::unordered_map<std::string, std::function<void(qrequest& request, qresponse& response)>> options_map;
+            void add_route(const std::string& method, const std::string& uri, 
+                std::function<void(qrequest& request, qresponse& respopnse)> handle);
+                std::vector<std::string> split(std::string uri, char delimiter);
+
+            const std::string METHODS_STR[7] = 
+            {
+                "get", "put", "post", "head", "delete", "patch", "options"
+            };
+
+            class qrouting_node 
+            {
+                public:
+                    qrouting_node();
+                    ~qrouting_node();
+
+                    void add_node(std::string& fragment);
+                    std::optional<std::shared_ptr<qrouting_node>> find_child(std::string& fragment);
+
+                    void set_handle(std::function<void(qrequest& request, qresponse& respopnse)> handle);
+                    void execute(qrequest& request, qresponse& response);
+
+                    bool is_parameter();
+                    void set_parameter(bool is_param);
+                    std::string get_param();
+                    void set_param(std::string& param);
+
+                    std::shared_ptr<qrouting_node> get_wildcard();
+
+                private:
+                    std::unordered_map<std::string, std::shared_ptr<qrouting_node>> static_nodes;
+                    std::shared_ptr<qrouting_node> param_node;
+                    std::shared_ptr<qrouting_node> wildcart_node;        
+    
+                    std::string param_name;
+                    bool is_param;
+                    std::function<void(qrequest& request, qresponse& respopnse)> handle;
+            };
+
+            std::unordered_map<std::string, std::shared_ptr<qrouting_node>> methods_map;
     };
 }

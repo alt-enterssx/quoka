@@ -2,7 +2,7 @@
 
 using namespace altenter::quoka;
 
-qserver::qserver(int port): qs_port(port), listener(this->router) {
+qserver::qserver(int port): qs_port(port) {
 }
 
 qserver::~qserver() {
@@ -57,20 +57,11 @@ void qserver::run() {
     } catch(qexception& ex) {
         detail::qlog_manager::manager().log(
             ex.what(), 
-            ex.get_type()
+            ex.type()
         );
 
         detail::qlog_manager::manager().shutdown();       
 
-        if (ex.get_type() == exception_type::CRITICAL) { exit(EXIT_FAILURE); }
+        if (ex.type() == exception_type::CRITICAL) { exit(EXIT_FAILURE); }
     }   
 }
-
-void qserver::get_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec) { this->router.get_point(uri, std::move(exec)); }
-void qserver::post_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec) { this->router.post_point(uri, std::move(exec)); }
-void qserver::put_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec) { this->router.put_point(uri, std::move(exec)); }
-void qserver::delete_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec) { this->router.delete_point(uri, std::move(exec)); }
-void qserver::patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec) { this->router.patch_point(uri, std::move(exec)); }
-void qserver::options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec) { this->router.options_point(uri, std::move(exec)); }
-void qserver::set_not_found(std::function<void(qrequest& request, qresponse& response)> not_found) { this->router.set_not_found(not_found); }
-

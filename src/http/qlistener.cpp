@@ -2,7 +2,7 @@
 
 using namespace altenter::quoka::detail;
 
-qlistener::qlistener(qrouter& router): is_running(true), router(router), qs_socket(-1), pool() {}
+qlistener::qlistener(): is_running(true), qs_socket(-1), pool() {}
 
 qlistener::~qlistener() { this->is_running = false; }
 
@@ -97,7 +97,7 @@ void qlistener::process(int socket) {
         );
         
         qresponse response;
-        this->router.endpoint(request.get_method(), request.get_uri(), request, response);
+        qrouter::router().endpoint(request.get_method(), request.get_uri(), request, response);
         response.generate();
         std::string raw_data = response.get_raw_data();
 

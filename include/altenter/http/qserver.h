@@ -41,24 +41,11 @@ namespace altenter::quoka
             ~qserver();
 
             void run();
-
-            void get_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
-            void post_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
-            void put_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
-            void delete_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
-            void patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
-            void options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& response)> exec);
-
-            void set_not_found(std::function<void(qrequest& request, qresponse& response)> not_found);
-            
         private:
 
             // | Datas
             bool is_running;
             int qs_port;
-
-            // | Classes
-            qrouter router;
 
             // | Details
             detail::qtcp_socket socket;

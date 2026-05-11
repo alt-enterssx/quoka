@@ -15,7 +15,7 @@ namespace altenter::quoka
     {
         public: 
             qexception(const std::string&& msg, exception_type type = exception_type::ERROR);
-            exception_type get_type();
+            exception_type type();
 
         private:
             std::string msg;
