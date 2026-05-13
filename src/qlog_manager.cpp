@@ -8,18 +8,18 @@ qlog_manager::~qlog_manager() {
     qconsole_logger::logger().shutdown();
 }
 
-qlog_manager& qlog_manager::manager() { 
+qlog_manager& qlog_manager::manager() noexcept { 
     static qlog_manager instance;
     return instance;
 }
 
-void qlog_manager::log(const std::string& msg, log_type type) {
+void qlog_manager::log(const std::string& msg, log_type type) noexcept {
     if ((flag & 0xF0) > 0) {
         qconsole_logger::logger().log(msg, type);
     }
 }
 
-void qlog_manager::log(const std::string& msg, exception_type type) {
+void qlog_manager::log(const std::string& msg, exception_type type) noexcept {
     detail::log_type type_from_exc = (type == exception_type::ERROR) ? detail::log_type::ERROR : detail::log_type::CRITICAL;
 
     if ((flag & 0xF0) > 0) {
@@ -27,9 +27,9 @@ void qlog_manager::log(const std::string& msg, exception_type type) {
     }
 }
 
-void qlog_manager::set_console(bool status) { this->flag = (status) ? (flag | 0xF0) : (flag & 0x00); }
+void qlog_manager::set_console(bool status) noexcept { this->flag = (status) ? (flag | 0xF0) : (flag & 0x00); }
 
-void qlog_manager::shutdown() {
+void qlog_manager::shutdown() noexcept {
     if ((flag & 0xF0) > 0) {
         qconsole_logger::logger().shutdown();
     }

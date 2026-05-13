@@ -2,21 +2,21 @@
 
 using namespace altenter::quoka::detail;
 
-qrequest_item::qrequest_item(std::function<void(int)> func, int client_socket): id(-1), executor(func), status(request_status::QUEUE), client_socket(client_socket) {}
-qrequest_item::qrequest_item(): id(-1), status(request_status::QUEUE) {}
+qrequest_item::qrequest_item(std::function<void(int)> func, int client_socket) noexcept : id(-1), executor(func), status(request_status::QUEUE), client_socket(client_socket) {}
+qrequest_item::qrequest_item() noexcept : id(-1), status(request_status::QUEUE) {}
 
 qrequest_item::~qrequest_item() {
     this->status = request_status::COMPLETE;
 }
 
-void qrequest_item::set_id(int id) { this->id = id; }
-int qrequest_item::get_id() { return this->id; }
+void qrequest_item::set_id(int id) noexcept { this->id = id; }
+int qrequest_item::get_id() const noexcept { return this->id; }
 
-void qrequest_item::execute() {
+void qrequest_item::execute() const noexcept {
     this->executor(this->client_socket);
 }
 
-qrequest_pool::qrequest_pool(): running(true) {
+qrequest_pool::qrequest_pool() noexcept : running(true) {
     int thread_ctn = qconfig::qoption<int>().option("pool.threads").default_value(DEFAULT_THREADS_CNT).value();
 
     qlog_manager::manager().logFormat(
@@ -50,7 +50,7 @@ qrequest_pool::qrequest_pool(): running(true) {
     }
 }
 
-void qrequest_pool::add_task(qrequest_item& item) {
+void qrequest_pool::add_task(qrequest_item& item) noexcept {
     {
         std::lock_guard<std::mutex> lk(this->mtx);
         item.set_id(this->requests.size() + 1);
@@ -68,7 +68,7 @@ void qrequest_pool::wait() {
     }
 }
 
-void qrequest_pool::shutdown() {
+void qrequest_pool::shutdown() noexcept {
     {
         std::lock_guard<std::mutex> lg(this->mtx);
         this->running = false;
@@ -83,4 +83,4 @@ void qrequest_pool::shutdown() {
     }
 }
 
-qrequest_pool::~qrequest_pool() {}
+qrequest_pool::~qrequest_pool() noexcept {}

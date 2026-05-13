@@ -2,8 +2,8 @@
 
 using namespace altenter::quoka::detail;
 
-qtcp_socket::qtcp_socket() {}
-qtcp_socket::~qtcp_socket() {}
+qtcp_socket::qtcp_socket() noexcept {}
+qtcp_socket::~qtcp_socket() noexcept {}
 
 void qtcp_socket::init_socket() {
     std::stringstream log_msg;
@@ -70,6 +70,6 @@ void qtcp_socket::bind_address(uint16_t port) {
     );
 }
 
-int qtcp_socket::get_socket() { return this->qs_socket; }
+int qtcp_socket::get_socket() const noexcept { return this->qs_socket; }
 
-sockaddr_in qtcp_socket::get_address() { return this->qs_address; }
+sockaddr_in qtcp_socket::get_address() const noexcept { return this->qs_address; }

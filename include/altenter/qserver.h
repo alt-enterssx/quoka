@@ -24,23 +24,23 @@ namespace altenter::quoka
     class qserver 
     {
         protected:
-            qserver(int port);
+            qserver(int port) noexcept;
         
         public:
             class builder 
             {
                 public:
-                    builder();
+                    builder() noexcept;
 
-                    builder& set_port(int port);
-                    std::unique_ptr<qserver> build();
+                    builder& set_port(int port) noexcept;
+                    std::unique_ptr<qserver> build() noexcept;
                 private:
                     int port_;
             }; 
 
-            ~qserver();
+            ~qserver() noexcept;
 
-            void run();
+            void run() noexcept;
         private:
 
             // | Datas

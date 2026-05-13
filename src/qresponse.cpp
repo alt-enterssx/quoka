@@ -3,12 +3,12 @@
 using namespace altenter::quoka;
 
 qresponse::qresponse(int status_code, std::string status_msg, std::string http_version, 
-                std::vector<qheader> headers, std::string body): status_code(status_code), status_msg(status_msg), http_version(http_version), headers(std::move(headers)), body(body) {}
+                std::vector<qheader> headers, std::string body) noexcept : status_code(status_code), status_msg(status_msg), http_version(http_version), headers(std::move(headers)), body(body) {}
 
-qresponse::qresponse() {}
-qresponse::~qresponse() {}
+qresponse::qresponse() noexcept {}
+qresponse::~qresponse() noexcept {}
 
-void qresponse::generate() {
+void qresponse::generate() noexcept {
     std::string raw_data;
     
     std::string firstLine = this->http_version + " " + std::to_string(this->status_code) + " " + this->status_msg;
@@ -32,17 +32,17 @@ void qresponse::generate() {
     this->raw_data = std::move(raw_data);
 }
 
-qresponse::builder& qresponse::builder::set_status_code(int status_code) { 
+qresponse::builder& qresponse::builder::set_status_code(int status_code) noexcept { 
     this->status_code_ = status_code; 
     return *this;
 }
 
-qresponse::builder& qresponse::builder::set_status_msg(std::string status_msg) { 
+qresponse::builder& qresponse::builder::set_status_msg(std::string status_msg) noexcept { 
     this->status_msg_ = std::move(status_msg); 
     return *this;
 }
 
-qresponse::builder& qresponse::builder::set_http_version(std::string http_version) { 
+qresponse::builder& qresponse::builder::set_http_version(std::string http_version) noexcept { 
     http_version.erase(http_version.begin(), std::find_if(http_version.begin(), http_version.end(), [](unsigned char ch) {
         return !std::isspace(ch);
     }));
@@ -55,19 +55,19 @@ qresponse::builder& qresponse::builder::set_http_version(std::string http_versio
     return *this;
 }
 
-qresponse::builder& qresponse::builder::add_header(std::string header_key, std::string header_value) { 
+qresponse::builder& qresponse::builder::add_header(std::string header_key, std::string header_value) noexcept { 
     qheader header = qheader(header_key, header_value);
     this->headers_.push_back(header);
 
     return *this;
 }
 
-qresponse::builder& qresponse::builder::set_body(std::string body) { 
+qresponse::builder& qresponse::builder::set_body(std::string body) noexcept { 
     this->body_ = std::move(body); 
     return *this;
 }
 
-qresponse::builder& qresponse::builder::send_file(const std::string& path) {
+qresponse::builder& qresponse::builder::send_file(const std::string& path) noexcept {
 
     std::unordered_map<std::string, std::string> mime_type = {
         {".html", "text/html"}, {".css", "text/css"}, {".js", "text/javascript"}
@@ -132,7 +132,7 @@ qresponse::builder& qresponse::builder::send_file(const std::string& path) {
     return *this;
 }
 
-qresponse::builder& qresponse::builder::send_text(const std::string& text) {
+qresponse::builder& qresponse::builder::send_text(const std::string& text) noexcept {
     this->body_ = std::move(text);
     this->headers_.push_back(qheader("Content-Type", "text/plain"));
     this->headers_.push_back(qheader("Content-Length", std::to_string(this->body_.size())));
@@ -141,9 +141,9 @@ qresponse::builder& qresponse::builder::send_text(const std::string& text) {
     return *this;
 }
 
-qresponse qresponse::builder::build() {
+qresponse qresponse::builder::build() noexcept {
     qresponse response = qresponse(this->status_code_, this->status_msg_, this->http_version_, this->headers_, this->body_);
     return response;
 }
 
-std::string qresponse::get_raw_data() { return this->raw_data; }
+std::string qresponse::get_raw_data() const noexcept { return this->raw_data; }

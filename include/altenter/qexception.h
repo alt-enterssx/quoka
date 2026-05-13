@@ -14,8 +14,8 @@ namespace altenter::quoka
     class qexception: public std::runtime_error
     {
         public: 
-            qexception(const std::string&& msg, exception_type type = exception_type::ERROR);
-            exception_type type();
+            qexception(const std::string&& msg, exception_type type = exception_type::ERROR) noexcept;
+            exception_type type() noexcept;
 
         private:
             std::string msg;

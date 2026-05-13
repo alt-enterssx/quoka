@@ -16,14 +16,14 @@ namespace altenter::quoka::detail
     class qtcp_socket 
     {
         public:
-            qtcp_socket();
-            ~qtcp_socket();
+            qtcp_socket() noexcept;
+            ~qtcp_socket() noexcept;
 
             void init_socket();
             void bind_address(uint16_t port);
 
-            int get_socket();
-            sockaddr_in get_address();
+            int get_socket() const noexcept;
+            sockaddr_in get_address() const noexcept;
             
         private:
             int qs_socket;

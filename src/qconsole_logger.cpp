@@ -19,7 +19,7 @@ qconsole_logger& qconsole_logger::logger() {
     return console_logger;
 }
 
-void qconsole_logger::shutdown() {
+void qconsole_logger::shutdown() noexcept {
     this->run = false;
     this->cv.notify_all();
     if (this->thrd.joinable()) {
@@ -27,7 +27,7 @@ void qconsole_logger::shutdown() {
     }
 }
 
-void qconsole_logger::log(const std::string& msg) {
+void qconsole_logger::log(const std::string& msg) noexcept {
     {
         std::lock_guard<std::mutex> lock(this->mtx);
         this->log_messages.emplace(std::move(msg), detail::log_type::INFO);
@@ -35,7 +35,7 @@ void qconsole_logger::log(const std::string& msg) {
     this->cv.notify_one();
 }
 
-void qconsole_logger::log(const std::string& msg, detail::log_type type) {
+void qconsole_logger::log(const std::string& msg, detail::log_type type) noexcept{
     {
         std::lock_guard<std::mutex> lock(this->mtx);
         this->log_messages.emplace(msg, type);
@@ -43,7 +43,7 @@ void qconsole_logger::log(const std::string& msg, detail::log_type type) {
     this->cv.notify_one();
 }
 
-void qconsole_logger::process() {
+void qconsole_logger::process() noexcept {
     while (run || !log_messages.empty()) {
         std::unique_lock<std::mutex> lock(mtx);
 
@@ -69,7 +69,7 @@ void qconsole_logger::process() {
     }
 }
 
-std::string qconsole_logger::get_prefix(detail::log_type type) {
+std::string qconsole_logger::get_prefix(detail::log_type type) const noexcept {
     std::string combined;
     switch(type) {
         case detail::log_type::WARNING: {
@@ -108,7 +108,7 @@ std::string qconsole_logger::get_prefix(detail::log_type type) {
     return combined;
 }
 
-std::string qconsole_logger::get_time_info() {
+std::string qconsole_logger::get_time_info() const noexcept {
     std::time_t t = time(nullptr);
     std::tm* loctime = localtime(&t);
 
@@ -124,7 +124,7 @@ std::string qconsole_logger::get_time_info() {
     return time_str;
 }
 
-char* qconsole_logger::get_color_text(detail::log_type type) {
+char* qconsole_logger::get_color_text(detail::log_type type) const noexcept {
     switch(type) {
         case detail::log_type::WARNING: {
             return WARNING_COLOR_TEXT;
@@ -145,7 +145,7 @@ char* qconsole_logger::get_color_text(detail::log_type type) {
     }
 }
 
-char* qconsole_logger::get_color_bg(detail::log_type type) {
+char* qconsole_logger::get_color_bg(detail::log_type type) const noexcept {
     switch(type) {
         case detail::log_type::WARNING: {
             return WARNING_COLOR;

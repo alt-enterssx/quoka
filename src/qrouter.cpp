@@ -2,21 +2,21 @@
 
 using namespace altenter::quoka;
 
-qrouter::qrouter() {
+qrouter::qrouter() noexcept {
     for (auto str : METHODS_STR) {
         this->methods_map.insert({str, std::make_shared<qrouting_node>()});
     }
     
     this->not_found = [this] (qrequest& request, qresponse& response) -> void { this->default_not_found(request, response); };
 }
-qrouter::~qrouter() {}
+qrouter::~qrouter() noexcept {}
 
 qrouter& qrouter::router() {
     static qrouter router;
     return router;
 }
 
-void qrouter::endpoint(const std::string& method, const std::string& uri, qrequest& request, qresponse& response) {
+void qrouter::endpoint(const std::string& method, const std::string& uri, qrequest& request, qresponse& response) noexcept {
     if (uri == "/") {
         auto root_node = this->methods_map.at(method);
         try {
@@ -107,35 +107,35 @@ void qrouter::endpoint(const std::string& method, const std::string& uri, qreque
     }
 }
 
-void qrouter::get_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::get_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->add_route("get", uri, handle);
 }
 
-void qrouter::put_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::put_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->add_route("put", uri, handle);
 }
 
-void qrouter::post_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::post_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->add_route("post", uri, handle);
 }
 
-void qrouter::head_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::head_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->add_route("head", uri, handle);
 }
 
-void qrouter::delete_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::delete_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->add_route("delete", uri, handle);
 }
 
-void qrouter::patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::patch_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->add_route("patch", uri, handle);
 }
 
-void qrouter::options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::options_point(const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->add_route("options", uri, handle);
 }
 
-void qrouter::add_route(const std::string& method, const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::add_route(const std::string& method, const std::string& uri, std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     if (uri == "/") {
         if (this->methods_map.find(method) == this->methods_map.end()) {
             detail::qlog_manager::manager().logFormat(
@@ -186,9 +186,9 @@ void qrouter::add_route(const std::string& method, const std::string& uri, std::
 
 }
 
-void qrouter::set_not_found(std::function<void(qrequest& request, qresponse& response)> not_found) { this->not_found = std::move(not_found); }
+void qrouter::set_not_found(std::function<void(qrequest& request, qresponse& response)> not_found) noexcept { this->not_found = std::move(not_found); }
 
-void qrouter::default_not_found(qrequest& request, qresponse& response) {
+void qrouter::default_not_found(qrequest& request, qresponse& response) noexcept {
     response = qresponse::builder()
         .set_http_version(request.get_http_version())
         .set_status_code(404)
@@ -197,7 +197,7 @@ void qrouter::default_not_found(qrequest& request, qresponse& response) {
         .build();
 }
 
-std::vector<std::string> qrouter::split(std::string uri, char delimiter) {
+std::vector<std::string> qrouter::split(std::string uri, char delimiter) noexcept {
     std::stringstream fragments_str(uri);
     std::string segment;
     std::vector<std::string> fragments;
@@ -210,10 +210,10 @@ std::vector<std::string> qrouter::split(std::string uri, char delimiter) {
     return fragments;
 } 
 
-qrouter::qrouting_node::qrouting_node(): is_param(false), param_node(nullptr), wildcart_node(nullptr) {}
-qrouter::qrouting_node::~qrouting_node() {}
+qrouter::qrouting_node::qrouting_node() noexcept: is_param(false), param_node(nullptr), wildcart_node(nullptr) {}
+qrouter::qrouting_node::~qrouting_node() noexcept {}
 
-std::optional<std::shared_ptr<qrouter::qrouting_node>> qrouter::qrouting_node::find_child(std::string& fragment) {
+std::optional<std::shared_ptr<qrouter::qrouting_node>> qrouter::qrouting_node::find_child(std::string& fragment) noexcept {
     if (this->static_nodes.find(fragment) != this->static_nodes.end()) {
         return std::make_optional<std::shared_ptr<qrouting_node>>(this->static_nodes.at(fragment));
     } else if (param_node != nullptr) {
@@ -225,7 +225,7 @@ std::optional<std::shared_ptr<qrouter::qrouting_node>> qrouter::qrouting_node::f
     return std::nullopt;
 }
 
-void qrouter::qrouting_node::add_node(std::string& fragment) {
+void qrouter::qrouting_node::add_node(std::string& fragment) noexcept {
     std::shared_ptr<qrouting_node> new_node =
         std::make_shared<qrouting_node>();
 
@@ -252,11 +252,11 @@ void qrouter::qrouting_node::add_node(std::string& fragment) {
     this->static_nodes.insert({fragment, new_node});
 }
 
-void qrouter::qrouting_node::set_handle(std::function<void(qrequest& request, qresponse& respopnse)> handle) {
+void qrouter::qrouting_node::set_handle(std::function<void(qrequest& request, qresponse& respopnse)> handle) noexcept {
     this->handle = std::move(handle);
 }
 
-void qrouter::qrouting_node::execute(qrequest& request, qresponse& response) {
+void qrouter::qrouting_node::execute(qrequest& request, qresponse& response) noexcept {
     if (!this->handle) {
         throw qexception("Handle to route not added", exception_type::ERROR);
     }
@@ -264,10 +264,10 @@ void qrouter::qrouting_node::execute(qrequest& request, qresponse& response) {
 }
 
 
-bool qrouter::qrouting_node::is_parameter() { return this->is_param; }
-void qrouter::qrouting_node::set_parameter(bool is_param) { this->is_param = is_param; }
+bool qrouter::qrouting_node::is_parameter() noexcept { return this->is_param; }
+void qrouter::qrouting_node::set_parameter(bool is_param) noexcept { this->is_param = is_param; }
 
-std::string qrouter::qrouting_node::get_param() { return this->param_name; }
-void qrouter::qrouting_node::set_param(std::string& param) { this->param_name = std::move(param); }
+std::string qrouter::qrouting_node::get_param() noexcept { return this->param_name; }
+void qrouter::qrouting_node::set_param(std::string& param) noexcept { this->param_name = std::move(param); }
 
-std::shared_ptr<qrouter::qrouting_node> qrouter::qrouting_node::get_wildcard() { return this->wildcart_node; }
+std::shared_ptr<qrouter::qrouting_node> qrouter::qrouting_node::get_wildcard() noexcept { return this->wildcart_node; }

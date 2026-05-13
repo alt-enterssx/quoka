@@ -2,21 +2,21 @@
 
 using namespace altenter::quoka;
 
-qserver::qserver(int port): qs_port(port) {
+qserver::qserver(int port) noexcept : qs_port(port) {
 }
 
-qserver::~qserver() {
+qserver::~qserver() noexcept {
     this->is_running = false;
 }
 
-qserver::builder::builder(): port_(-1) {}
+qserver::builder::builder() noexcept : port_(-1) {}
 
-qserver::builder& qserver::builder::set_port(int port) {
+qserver::builder& qserver::builder::set_port(int port) noexcept {
     this->port_ = port;
     return *this;
 }
 
-std::unique_ptr<qserver> qserver::builder::build() {
+std::unique_ptr<qserver> qserver::builder::build() noexcept {
     if (port_ == -1) {
         port_ = qconfig::qoption<int>().option("server.port").default_value(DEFAULT_PORT_START).value();
     }
@@ -39,7 +39,7 @@ std::unique_ptr<qserver> qserver::builder::build() {
     );
 }
 
-void qserver::run() {
+void qserver::run() noexcept {
     try {
         this->socket.init_socket();
         this->socket.bind_address(this->qs_port);

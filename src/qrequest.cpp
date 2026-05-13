@@ -2,11 +2,11 @@
 
 using namespace altenter::quoka;
 
-qrequest::qrequest(std::string& raw_data): raw_data(std::move(raw_data)) {}
+qrequest::qrequest(std::string& raw_data) noexcept: raw_data(std::move(raw_data)) {}
 
-qrequest::~qrequest() {}
+qrequest::~qrequest() noexcept {}
 
-void qrequest::parse() {
+void qrequest::parse() noexcept {
     std::vector<std::string> lines = this->split(this->raw_data, "\n");
     std::vector<std::string> firstLineData;
 
@@ -50,11 +50,11 @@ void qrequest::parse() {
     }
 }
 
-void qrequest::add_param(std::string& param, std::string& value) {
+void qrequest::add_param(std::string& param, std::string& value) noexcept {
     this->params_map.insert({param, value});
 }
 
-std::string qrequest::get_param(const std::string& param) {
+std::string qrequest::get_param(const std::string& param) const noexcept {
     if (
         this->params_map.find(param) == this->params_map.end()
     ) {
@@ -70,11 +70,11 @@ std::string qrequest::get_param(const std::string& param) {
     return param_str;
 }
 
-std::string qrequest::get_raw_data() { return this->raw_data; }
+std::string qrequest::get_raw_data() const noexcept { return this->raw_data; }
 
-std::string qrequest::get_uri() { return this->uri; }
+std::string qrequest::get_uri() const noexcept { return this->uri; }
 
-std::string qrequest::get_header(const std::string& header) { 
+std::string qrequest::get_header(const std::string& header) const noexcept { 
     if (
         this->headers_map.find(header) == this->headers_map.end()
     ) {
@@ -94,11 +94,11 @@ std::string qrequest::get_header(const std::string& header) {
     return header_str;
 }
 
-std::string qrequest::get_method() { return this->method; }
+std::string qrequest::get_method() const noexcept { return this->method; }
 
-std::string qrequest::get_body() { return this->body; }
+std::string qrequest::get_body() const noexcept { return this->body; }
 
-std::string qrequest::get_http_version() { return this->http_version; }
+std::string qrequest::get_http_version() const noexcept { return this->http_version; }
 
 std::vector<std::string> qrequest::split(std::string text, std::string delimiter) {
     std::vector<std::string> seglist;

@@ -10,7 +10,15 @@ qconfig& qconfig::config() {
     return config;
 }
 
-void qconfig::init() {
+void qconfig::init() noexcept {
+
+    auto is_valid_path = [this] () -> bool {
+        size_t dot_pos = this->conf_path.find_last_of('.');
+        std::string extension_type = this->conf_path.substr(dot_pos, this->conf_path.size() - 1);
+
+        return extension_type == ".conf";
+    };
+
     if (finalize) {
         detail::qlog_manager::manager().log(
             "Config initialized before", 
@@ -25,7 +33,7 @@ void qconfig::init() {
         );
         return;
     }
-    else if (!this->is_valid_path()) {
+    else if (!is_valid_path()) {
         detail::qlog_manager::manager().logFormat(
             "Path to config is invalid: {}", 
             detail::log_type::ERROR,
@@ -96,13 +104,3 @@ std::vector<std::string> qconfig::split(std::string text, std::string delimiter)
 
     return seglist;
 } 
-
-bool qconfig::is_valid_path() {
-    std::vector<std::string> params = this->split(this->conf_path, "/");
-    if (params.empty()) { return false; }
-
-    std::vector<std::string> file_params = this->split(params.at(params.size() - 1), ".");
-    if (file_params.size() < 2) { return false; }
-
-    return file_params.at(file_params.size() - 1) == "conf";
-}

@@ -22,15 +22,15 @@ namespace altenter::quoka::detail
     class qrequest_item
     {
         public:
-            qrequest_item(std::function<void(int)> func, int client_socket);
-            qrequest_item();
+            qrequest_item(std::function<void(int)> func, int client_socket) noexcept;
+            qrequest_item() noexcept;
 
-            ~qrequest_item();
+            ~qrequest_item() noexcept;
 
-            int get_id();
-            void set_id(int id);
+            int get_id() const noexcept;
+            void set_id(int id) noexcept;
 
-            void execute();
+            void execute() const noexcept;
         private:
             request_status status;
             int id;
@@ -43,13 +43,13 @@ namespace altenter::quoka::detail
     class qrequest_pool
     {
         public:
-            qrequest_pool();
-            ~qrequest_pool();
+            qrequest_pool() noexcept;
+            ~qrequest_pool() noexcept;
 
-            void add_task(qrequest_item& task);
+            void add_task(qrequest_item& task) noexcept;
 
-            void wait();
-            void shutdown();
+            void wait() noexcept;
+            void shutdown() noexcept;
 
         private:
             bool running;

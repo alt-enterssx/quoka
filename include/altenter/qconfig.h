@@ -26,12 +26,12 @@ namespace altenter::quoka
                 public:
                     qoption(): default_val(nullptr) {} 
 
-                    qoption& option(const std::string& key) {
+                    qoption& option(const std::string& key) noexcept {
                         this->value_str = qconfig::config().get(key);
                         return *this;
                     }
                     
-                    qoption& default_value(T value) {
+                    qoption& default_value(T value) noexcept {
                         this->default_val = std::make_unique<T>(value);
                         return *this;
                     }
@@ -63,18 +63,17 @@ namespace altenter::quoka
                         std::unique_ptr<T> default_val;
             };
 
-            qconfig(const qconfig&) = delete;
-            void operator=(const qconfig&) = delete;
+            qconfig(const qconfig&) noexcept = delete;
+            void operator=(const qconfig&) const noexcept = delete;
             
-            static qconfig& config();
+            static qconfig& config() noexcept;
 
-            void init();
+            void init() noexcept;
             void set_path(const std::string& path);
             std::string get(const std::string& key);
 
         private:
             std::vector<std::string> split(std::string text, std::string delimiter);
-            bool is_valid_path();
 
             std::string conf_path;
             bool finalize;

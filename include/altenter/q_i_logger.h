@@ -16,8 +16,8 @@ namespace altenter::quoka::detail
     class q_i_logger 
     {
         public:
-            virtual void log(const std::string& msg, log_type type = log_type::INFO) = 0;
-            virtual void log(const std::string& msg) = 0;
-            virtual void shutdown() = 0;
+            virtual void log(const std::string& msg, log_type type = log_type::INFO) noexcept = 0;
+            virtual void log(const std::string& msg) noexcept = 0;
+            virtual void shutdown() noexcept = 0;
     };
 }

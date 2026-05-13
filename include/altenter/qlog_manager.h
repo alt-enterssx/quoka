@@ -16,17 +16,17 @@ namespace altenter::quoka::detail
            ~qlog_manager();
 
         public:
-            qlog_manager(const qlog_manager&) = delete;
-            void operator=(const qlog_manager&) = delete;
+            qlog_manager(const qlog_manager&) noexcept = delete;
+            void operator=(const qlog_manager&) noexcept = delete;
 
-            static qlog_manager& manager();
+            static qlog_manager& manager() noexcept;
 
-            void log(const std::string& msg, log_type type);
-            void log(const std::string& msg, exception_type type);
-            void set_console(bool status);
+            void log(const std::string& msg, log_type type) noexcept;
+            void log(const std::string& msg, exception_type type) noexcept;
+            void set_console(bool status) noexcept;
             
             template<typename... Args>
-            void logFormat(std::string_view fmt, log_type type, Args&&... args) {
+            void logFormat(std::string_view fmt, log_type type, Args&&... args) noexcept {
                 std::ostringstream ss;
 
                 std::string_view rest = fmt;
@@ -63,7 +63,7 @@ namespace altenter::quoka::detail
                 this->log(ss.str(), type);
             }
             
-            void shutdown();
+            void shutdown() noexcept;
 
         private:
             uint8_t flag;

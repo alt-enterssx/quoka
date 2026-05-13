@@ -27,9 +27,9 @@ namespace altenter::quoka::detail
             ~qlistener();
 
             void listen();
-            void set_socket(int qs_socket);
+            void set_socket(int qs_socket) noexcept;
 
-            void process(int socket);
+            void process(int socket) const noexcept;
         private:    
             bool is_running;
         

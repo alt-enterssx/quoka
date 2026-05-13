@@ -57,9 +57,9 @@ void qlistener::listen() {
     }
 }  
 
-void qlistener::set_socket(int qs_socket) { this->qs_socket = qs_socket; }
+void qlistener::set_socket(int qs_socket) noexcept { this->qs_socket = qs_socket; }
 
-void qlistener::process(int socket) {
+void qlistener::process(int socket) const noexcept {
     size_t buff_siz = 1024;
     char* buffer = new char[buff_siz];
     

@@ -52,10 +52,10 @@ namespace altenter::quoka
 
             static qconsole_logger& logger();
 
-            void shutdown() override;
+            void shutdown() noexcept override;
 
-            void log(const std::string& msg) override;
-            void log(const std::string& msg, detail::log_type type = detail::log_type::INFO) override;
+            void log(const std::string& msg) noexcept override;
+            void log(const std::string& msg, detail::log_type type = detail::log_type::INFO) noexcept override;
             
         private:
             std::queue<log_message> log_messages;
@@ -65,12 +65,12 @@ namespace altenter::quoka
             std::thread thrd;
             std::atomic<bool> run{true};
 
-            void process();
+            void process() noexcept;
 
-            std::string get_prefix(detail::log_type type);
-            std::string get_time_info();
-            char* get_color_text(detail::log_type type);
-            char* get_color_bg(detail::log_type type);
+            std::string get_prefix(detail::log_type type) const noexcept;
+            std::string get_time_info() const noexcept;
+            char* get_color_text(detail::log_type type) const noexcept;
+            char* get_color_bg(detail::log_type type) const noexcept;
 
     };
 }

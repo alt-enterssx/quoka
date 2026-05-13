@@ -12,20 +12,20 @@ namespace altenter::quoka
     class qrequest 
     {
     public:
-        qrequest(std::string& raw_data);
-        ~qrequest();
+        qrequest(std::string& raw_data) noexcept;
+        ~qrequest() noexcept;
 
-        void parse();
+        void parse() noexcept;
 
-        void add_param(std::string& param, std::string& value);
-        std::string get_param(const std::string& param);
+        void add_param(std::string& param, std::string& value) noexcept;
+        std::string get_param(const std::string& param) const noexcept;
 
-        std::string get_raw_data();
-        std::string get_uri();
-        std::string get_header(const std::string& header);
-        std::string get_method();
-        std::string get_body();
-        std::string get_http_version();
+        std::string get_raw_data() const noexcept;
+        std::string get_uri() const noexcept;
+        std::string get_header(const std::string& header) const noexcept;
+        std::string get_method() const noexcept;
+        std::string get_body() const noexcept;
+        std::string get_http_version() const noexcept;
 
     private:
         std::string raw_data;
@@ -37,6 +37,6 @@ namespace altenter::quoka
         std::string method;
         std::string body;
 
-        std::vector<std::string> split(std::string text, std::string delimiter);
+        std::vector<std::string> split(std::string text, std::string delimiter) noexcept;
     };
 }
