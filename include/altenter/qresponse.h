@@ -4,7 +4,10 @@
 #include <vector>
 #include <algorithm> 
 #include <cctype>
+#include <fstream>
 #include "altenter/qlog_manager.h"
+#include "altenter/qconfig.h"
+#include "altenter/qexception.h"
 
 namespace altenter::quoka 
 {
@@ -32,6 +35,9 @@ namespace altenter::quoka
                     builder& add_header(std::string header_key, std::string header_value);
                     builder& set_body(std::string body);
 
+                    builder& send_file(const std::string& path);
+                    builder& send_text(const std::string& text);
+
                     qresponse build();
                 private:
                     std::string raw_data_;
@@ -42,7 +48,7 @@ namespace altenter::quoka
 
                     std::vector<qheader> headers_;
             };
-            
+
             qresponse();
             ~qresponse();
 

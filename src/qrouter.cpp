@@ -20,15 +20,16 @@ void qrouter::endpoint(const std::string& method, const std::string& uri, qreque
     if (uri == "/") {
         auto root_node = this->methods_map.at(method);
         try {
-            return root_node->execute(request, response);
+            root_node->execute(request, response);
         } catch (qexception& ex) {
             detail::qlog_manager::manager().log(
                 ex.what(),
                 ex.type()
             );
 
-            return this->not_found(request, response);
+            this->not_found(request, response);
         }
+        return;
     }   
     
     std::vector<std::string> fragments = this->split(uri, '/');
@@ -95,7 +96,7 @@ void qrouter::endpoint(const std::string& method, const std::string& uri, qreque
     }
 
     try {
-        return node->execute(request, response);
+        node->execute(request, response);
     } catch (qexception& ex) {
         detail::qlog_manager::manager().log(
             ex.what(),
