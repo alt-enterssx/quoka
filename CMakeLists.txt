@@ -25,6 +25,3 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-
-add_executable(example main.cpp)
-target_link_libraries(example PRIVATE ${PROJECT_NAME})
