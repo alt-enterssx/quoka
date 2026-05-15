@@ -153,12 +153,12 @@ Responses are handled through the `qresponse` abstraction.
 ## Sending Plain Text
 
 ```cpp
-        response = qresponse::builder()
-            .set_status_code(200)
-            .set_status_msg("OK")
-            .set_http_version(request.get_http_version())
-            .send_text("Successfully logged")
-            .build();
+response = qresponse::builder()
+    .set_status_code(200)
+    .set_status_msg("OK")
+    .set_http_version(request.get_http_version())
+    .send_text("Successfully logged")
+    .build();
 ```
 
 ---
@@ -170,12 +170,12 @@ static.path=/home/altenter/quoka/static/
 ```
 
 ```cpp
-        response = qresponse::builder()
-            .set_status_code(200)
-            .set_status_msg("OK")
-            .set_http_version(request.get_http_version())
-            .send_file("/pages/products.html")
-            .build();
+response = qresponse::builder()
+    .set_status_code(200)
+    .set_status_msg("OK")
+    .set_http_version(request.get_http_version())
+    .send_file("/pages/products.html")
+    .build();
 
 ```
 
