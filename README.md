@@ -84,7 +84,7 @@ int main() {
             .build();
     });
 
-    server.start();
+    server->run();
 
     return 0;
 }
