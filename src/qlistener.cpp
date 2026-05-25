@@ -97,7 +97,21 @@ void qlistener::process(int socket) const noexcept {
         );
         
         qresponse response;
-        qrouter::router().endpoint(request.get_method(), request.get_uri(), request, response);
+
+        if(qcors::cors().is_preflight(request)) {
+            response = qresponse::builder()
+                .set_status_code(204)
+                .set_status_msg("No content")
+                .set_http_version(request.get_http_version())
+                .build();
+
+                qcors::cors().apply(response);
+        }
+        else {
+            qrouter::router().endpoint(request.get_method(), request.get_uri(), request, response);
+            qcors::cors().apply(response);
+        }
+
         response.generate();
         std::string raw_data = response.get_raw_data();
 

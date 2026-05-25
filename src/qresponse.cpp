@@ -146,4 +146,9 @@ qresponse qresponse::builder::build() noexcept {
     return response;
 }
 
+void qresponse::add_header(std::string header_key, std::string header_value) noexcept {
+    qheader header = qheader(header_key, header_value);
+    this->headers.push_back(header);
+}
+
 std::string qresponse::get_raw_data() const noexcept { return this->raw_data; }

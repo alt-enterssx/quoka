@@ -52,6 +52,8 @@ namespace altenter::quoka
             qresponse() noexcept;
             ~qresponse() noexcept;
 
+            void add_header(std::string header_key, std::string header_value) noexcept;
+
             void generate() noexcept;
             std::string get_raw_data() const noexcept;
 

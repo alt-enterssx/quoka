@@ -18,6 +18,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/qtcp_sokcet.cpp
     src/qrequest_pool.cpp
     src/qexception.cpp
+    src/qcors.cpp
 )
 
 target_include_directories(${PROJECT_NAME} 

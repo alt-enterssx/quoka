@@ -256,7 +256,7 @@ void qrouter::qrouting_node::set_handle(std::function<void(qrequest& request, qr
     this->handle = std::move(handle);
 }
 
-void qrouter::qrouting_node::execute(qrequest& request, qresponse& response) noexcept {
+void qrouter::qrouting_node::execute(qrequest& request, qresponse& response) {
     if (!this->handle) {
         throw qexception("Handle to route not added", exception_type::ERROR);
     }

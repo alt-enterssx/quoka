@@ -15,6 +15,7 @@
 #include "altenter/qrequest_pool.h"
 #include "altenter/q_i_logger.h"
 #include "altenter/qexception.h"
+#include "altenter/qcors.h"
 
 #define CLASSNAMELOG "qlistener"
 

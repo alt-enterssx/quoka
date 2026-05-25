@@ -54,7 +54,7 @@ namespace altenter::quoka
                     std::optional<std::shared_ptr<qrouting_node>> find_child(std::string& fragment) noexcept;
 
                     void set_handle(std::function<void(qrequest& request, qresponse& respopnse)> handle)noexcept;
-                    void execute(qrequest& request, qresponse& response) noexcept;
+                    void execute(qrequest& request, qresponse& response);
 
                     bool is_parameter() noexcept;
                     void set_parameter(bool is_param) noexcept;
